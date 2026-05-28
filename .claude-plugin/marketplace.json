@@ -1,0 +1,30 @@
+{
+  "name": "time-travel",
+  "owner": {
+    "name": "Chris Sood",
+    "url": "https://github.com/chrisaman"
+  },
+  "metadata": {
+    "description": "A single-plugin marketplace for Time Travel — a multi-agent premortem skill for Claude Code that projects plan failure modes across T+3/6/12-month horizons, grounded in real-world analogue cases."
+  },
+  "plugins": [
+    {
+      "name": "time-travel",
+      "source": "./plugins/time-travel",
+      "description": "Multi-agent premortem: 5–7 stakeholder personas project failure modes across T+3/6/12-month horizons, grounded in real-world analogue cases. Outputs a Confirmed/Inflated/Buried risk classification, tripwires, mitigations, a revised plan with mitigations folded in, and an optional exec one-pager.",
+      "version": "0.1.0",
+      "homepage": "https://github.com/chrisaman/time-travel",
+      "license": "MIT",
+      "keywords": [
+        "premortem",
+        "planning",
+        "risk-analysis",
+        "multi-agent",
+        "product-management",
+        "decision-support",
+        "ai-skepticism"
+      ],
+      "category": "planning"
+    }
+  ]
+}

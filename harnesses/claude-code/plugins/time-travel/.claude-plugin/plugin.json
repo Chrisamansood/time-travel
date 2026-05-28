@@ -1,0 +1,10 @@
+{
+  "name": "time-travel",
+  "version": "0.1.0",
+  "description": "Multi-agent premortem skill for plans, projects, and AI-generated proposals. Sends stakeholder personas to T+3/6/12 months in the future and brings back a structured risk classification and a revised plan.",
+  "license": "MIT",
+  "author": {
+    "name": "Chris Sood"
+  },
+  "homepage": "https://github.com/chrisaman/time-travel"
+}
