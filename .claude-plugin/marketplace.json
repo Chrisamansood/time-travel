@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "time-travel",
-      "source": "./plugins/time-travel",
+      "source": "./harnesses/claude-code/plugins/time-travel",
       "description": "Multi-agent premortem: 5–7 stakeholder personas project failure modes across T+3/6/12-month horizons, grounded in real-world analogue cases. Outputs a Confirmed/Inflated/Buried risk classification, tripwires, mitigations, a revised plan with mitigations folded in, and an optional exec one-pager.",
       "version": "0.1.0",
       "homepage": "https://github.com/chrisaman/time-travel",
