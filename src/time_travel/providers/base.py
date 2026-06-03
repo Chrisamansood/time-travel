@@ -51,7 +51,7 @@ class LLMProvider(ABC):
     @abstractmethod
     async def complete_parallel(
         self,
-        calls: list[dict],
+        calls: list[dict[str, str]],
     ) -> list[str]:
         """Run multiple completions in parallel and return results in order.
 

@@ -1,18 +1,23 @@
 """Tests for the canonical Report data model and JSON round-trip."""
 from __future__ import annotations
+
 import json
 from datetime import datetime
-
-import pytest
-
 
 # ── helpers ────────────────────────────────────────────────────────────────────
 
 def make_minimal_report():
     """Build the smallest valid Report for testing."""
     from time_travel.models import (
-        BuriedRisk, EvidenceItem, InflatedRisk, Mitigation,
-        PersonaActivation, Rebuttal, Report, Risk, SeverityScore, UserPOV,
+        BuriedRisk,
+        EvidenceItem,
+        Mitigation,
+        PersonaActivation,
+        Rebuttal,
+        Report,
+        Risk,
+        SeverityScore,
+        UserPOV,
     )
     return Report(
         plan_title="Test Plan",
@@ -38,7 +43,9 @@ def make_minimal_report():
             Risk(
                 id=1,
                 name="Budget Overrun",
-                severity=SeverityScore(trust=1, user_pain=0, blind_spot=2, ops_load=1, financial=3, strategic=2),
+                severity=SeverityScore(
+                    trust=1, user_pain=0, blind_spot=2, ops_load=1, financial=3, strategic=2
+                ),
                 likelihood="High",
                 urgency="Block",
                 tripwire="Burn rate > 120% in week 3",
@@ -59,11 +66,19 @@ def make_minimal_report():
         ],
         rebuttal=Rebuttal(
             agreements=["Budget risk is real"],
-            disagreements=["Skeptical Money vs Frustrated End User on timeline: SM wants longer runway, FEU wants faster delivery"],
+            disagreements=[
+                "Skeptical Money vs Frustrated End User on timeline: "
+                "SM wants longer runway, FEU wants faster delivery"
+            ],
             cascades=["Budget overrun → team cuts → delivery slip. Severity uplift: High"],
         ),
         mitigations=[
-            Mitigation(risk_id=1, action="Add weekly budget review", owner_shape="Finance lead", by="Week 1")
+            Mitigation(
+                risk_id=1,
+                action="Add weekly budget review",
+                owner_shape="Finance lead",
+                by="Week 1",
+            )
         ],
         revised_plan="We will do the thing. _[Mitigation for Risk #1: weekly budget review]_",
         evidence=[

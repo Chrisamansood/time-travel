@@ -12,7 +12,10 @@ import sys
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="time-travel",
-        description="Multi-agent premortem for plans. Sends personas to the future, brings back risks.",
+        description=(
+            "Multi-agent premortem for plans. "
+            "Sends personas to the future, brings back risks."
+        ),
     )
     subparsers = parser.add_subparsers(dest="command")
 
@@ -29,13 +32,26 @@ def create_parser() -> argparse.ArgumentParser:
     run.add_argument("--search", default="tavily", help="Web search provider (default: tavily)")
     run.add_argument("--fast", action="store_true", help="Skip parallel dispatch (~20%% cost)")
     run.add_argument("--horizons", default="3mo,6mo,12mo", help="Comma-separated horizon list")
-    run.add_argument("--output", default="./time-travel-reports", help="Output directory for artifacts")
-    run.add_argument("--for-exec", action="store_true", dest="for_exec", help="Emit exec one-pager")
-    run.add_argument("--ai-source", action="store_true", dest="ai_source", help="Flag plan as AI-authored")
-    run.add_argument("--no-process-log", action="store_true", dest="no_process_log", help="Skip process log")
+    run.add_argument(
+        "--output", default="./time-travel-reports", help="Output directory for artifacts"
+    )
+    run.add_argument(
+        "--for-exec", action="store_true", dest="for_exec", help="Emit exec one-pager"
+    )
+    run.add_argument(
+        "--ai-source", action="store_true", dest="ai_source", help="Flag plan as AI-authored"
+    )
+    run.add_argument(
+        "--no-process-log",
+        action="store_true",
+        dest="no_process_log",
+        help="Skip process log",
+    )
 
     # ── render ────────────────────────────────────────────────────────────────
-    render = subparsers.add_parser("render", help="Re-render from a saved JSON report (no LLM calls)")
+    render = subparsers.add_parser(
+        "render", help="Re-render from a saved JSON report (no LLM calls)"
+    )
     render.add_argument("report_json", help="Path to a report JSON file")
     render.add_argument("--output", default="./time-travel-reports", help="Output directory")
 

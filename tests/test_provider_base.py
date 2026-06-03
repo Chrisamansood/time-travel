@@ -4,9 +4,10 @@ Tests verify the interface contract using a minimal concrete subclass.
 No real LLM calls happen here.
 """
 from __future__ import annotations
-import asyncio
-import pytest
 
+import asyncio
+
+import pytest
 
 # ── minimal concrete implementation for tests ──────────────────────────────────
 

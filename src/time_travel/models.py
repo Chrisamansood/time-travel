@@ -9,7 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from dataclasses_json import config as dcj_config, dataclass_json
+from dataclasses_json import config as dcj_config
+from dataclasses_json import dataclass_json
 from marshmallow import fields as mm_fields
 
 
