@@ -43,7 +43,7 @@ def make_minimal_report():
                 urgency="Block",
                 tripwire="Burn rate > 120% in week 3",
                 change_my_mind="Signed fixed-price vendor contract",
-                mitigation="Add weekly budget review",
+                mitigation_summary="Add weekly budget review",
                 owner_shape="Finance lead",
                 citations=["Skeptical Money: POV on financial exposure"],
             )
@@ -179,4 +179,19 @@ def test_report_json_round_trip_preserves_datetime():
     from time_travel.models import Report
     report = make_minimal_report()
     loaded = Report.from_json(report.to_json())
-    assert loaded.generated_at == report.generated_at or str(loaded.generated_at) == str(report.generated_at)
+    assert loaded.generated_at == report.generated_at
+
+
+def test_report_json_round_trip_naive_datetime_only():
+    """Timezone-aware datetimes are not supported on Python <3.11.
+
+    The decoder uses datetime.fromisoformat which only handles timezone
+    offsets (e.g. +00:00) from Python 3.11+. Always use naive UTC datetimes
+    when constructing Report objects to maintain >=3.10 compatibility.
+    """
+    from time_travel.models import Report
+    report = make_minimal_report()
+    # generated_at is naive (no tzinfo) — must survive round-trip unchanged
+    assert report.generated_at.tzinfo is None
+    loaded = Report.from_json(report.to_json())
+    assert loaded.generated_at.tzinfo is None

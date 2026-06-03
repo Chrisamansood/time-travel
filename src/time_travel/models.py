@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 
 from dataclasses_json import config as dcj_config, dataclass_json
 from marshmallow import fields as mm_fields
@@ -41,7 +40,7 @@ class Risk:
     urgency: str              # "Block" | "Patch-fast" | "Monitor"
     tripwire: str             # first observable field signal
     change_my_mind: str       # evidence that would reduce confidence in this risk
-    mitigation: str           # concrete action available this week
+    mitigation_summary: str   # one-line action summary (full detail in Mitigation class)
     owner_shape: str          # type of role that would own this
     citations: list[str] = field(default_factory=list)
 
@@ -155,8 +154,8 @@ class Report:
     mitigated_confidence: int
 
     # ── run metadata ──────────────────────────────────────────────────────
-    flags_used: dict = field(default_factory=dict)
-    process_log_path: Optional[str] = None
-    exec_pager_path: Optional[str] = None
+    flags_used: dict[str, bool] = field(default_factory=dict)
+    process_log_path: str | None = None
+    exec_pager_path: str | None = None
     ai_source: bool = False
     report_id: str = ""
