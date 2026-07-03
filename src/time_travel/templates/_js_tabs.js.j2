@@ -1,0 +1,13 @@
+document.addEventListener('DOMContentLoaded',function(){
+  var tabs=document.querySelectorAll('.tt-tab');
+  var panels=document.querySelectorAll('.tt-tabpanel');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click',function(){
+      tabs.forEach(function(t){t.classList.remove('active')});
+      panels.forEach(function(p){p.classList.remove('active')});
+      tab.classList.add('active');
+      var target=document.getElementById(tab.getAttribute('data-target'));
+      if(target)target.classList.add('active');
+    });
+  });
+});

@@ -1,0 +1,29 @@
+# {{ report.plan_title }} — Executive Summary
+
+> Time-Travel Premortem · {{ report.generated_at.strftime('%Y-%m-%d') }} · {{ report.personas | length }} personas
+
+**Confidence:** {{ report.unmitigated_confidence }}% unmitigated → {{ report.mitigated_confidence }}% mitigated (+{{ report.mitigated_confidence - report.unmitigated_confidence }}pp)
+
+## Top Risks
+
+{% for risk in report.confirmed_risks[:5] %}
+{{ loop.index }}. **{{ risk.name }}** ({{ risk.likelihood }}, {{ risk.urgency }}) — {{ risk.mitigation_summary }}
+{% endfor %}
+
+## Key Mitigations
+
+{% for m in report.mitigations[:5] %}
+- {{ m.action }} *({{ m.owner_shape }}, by {{ m.by }})*
+{% endfor %}
+
+{% if report.buried_risks %}
+## Watch List
+
+{% for risk in report.buried_risks[:2] %}
+- **{{ risk.name }}:** {{ risk.why_unspoken }}
+{% endfor %}
+{% endif %}
+
+---
+
+*Full report: report.md · Dashboard: report.html*

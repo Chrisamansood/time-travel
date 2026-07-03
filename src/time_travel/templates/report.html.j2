@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time-Travel · {{ report.plan_title }}</title>
+<style>
+{% include '_css_matrix.css.j2' %}
+</style>
+</head>
+<body>
+<div class="tt-narrow">// BEST VIEWED AT ≥1200px WIDTH</div>
+<div class="tt-top"></div>
+
+{% include '_zone_header.html.j2' %}
+{% include '_zone_confidence.html.j2' %}
+
+<div class="tt-main">
+  <div class="tt-rail">
+    <div class="tt-label">PERSONAS</div>
+    {% for p in report.personas %}
+    <div class="tt-chip">{{ p.name }}</div>
+    {% endfor %}
+
+    <div class="tt-label" style="margin-top:24px">HORIZONS</div>
+    {% for h in report.horizons %}
+    <div class="tt-horizon">
+      <span class="tt-hdot {% if loop.index == 1 %}h-short{% elif loop.index == 2 %}h-mid{% else %}h-long{% endif %}"></span>
+      T+{{ h }}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="tt-center">
+    {% include '_zone_risks.html.j2' %}
+  </div>
+</div>
+
+{% include '_zone_userpov.html.j2' %}
+{% include '_zone_mitigations.html.j2' %}
+{% include '_zone_evidence.html.j2' %}
+{% include '_zone_footer.html.j2' %}
+
+<div class="tt-bot"></div>
+<script>
+{% include '_js_tabs.js.j2' %}
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<div class="tt-bottom">
+  <div>
+    <div class="tt-label">EVIDENCE &amp; ANALOGUES</div>
+    {% for e in report.evidence %}
+    <div class="tt-evidence-item">
+      <div class="tt-ev-title">{{ e.title }}</div>
+      <div class="tt-ev-detail">{{ e.who }} · {{ e.when }} — {{ e.why_relevant }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  <div>
+    <div class="tt-label">METHODOLOGY</div>
+    <div class="tt-method-row"><span class="k">source </span><span class="v">{{ report.plan_source }}</span></div>
+    <div class="tt-method-row"><span class="k">personas </span><span class="v">{{ report.personas | length }}</span></div>
+    <div class="tt-method-row"><span class="k">horizons </span><span class="v">{{ report.horizons | join(', ') }}</span></div>
+    <div class="tt-method-row"><span class="k">report_id </span><span class="v">{{ report.report_id }}</span></div>
+    {% for flag, val in report.flags_used.items() %}
+    <div class="tt-method-row"><span class="k">--{{ flag }} </span><span class="v">{{ val | lower }}</span></div>
+    {% endfor %}
+  </div>
+</div>

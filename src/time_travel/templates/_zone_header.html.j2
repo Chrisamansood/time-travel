@@ -1,0 +1,11 @@
+<div class="tt-header">
+  <h1><span class="accent">&gt;</span> TIME-TRAVEL <span class="accent">·</span> {{ report.plan_title }}</h1>
+  <div class="tt-header-meta">
+    <span>{{ report.generated_at.strftime('%Y-%m-%d %H:%M') }} · {{ report.personas | length }} PERSONAS</span>
+    <span>T+{{ report.horizons | join(', T+') }}</span>
+  </div>
+  <div class="tt-dl-links">
+    <a href="report.md">↓ report.md</a>
+    {% if report.exec_pager_path %}<a href="exec.md">↓ exec.md</a>{% endif %}
+  </div>
+</div>

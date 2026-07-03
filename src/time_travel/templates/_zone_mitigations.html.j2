@@ -1,0 +1,10 @@
+<div class="tt-label">MITIGATIONS THIS WEEK</div>
+<div class="tt-mits">
+  {% for m in report.mitigations %}
+  <div class="tt-mit">
+    <span class="tt-mit-num">{{ '%02d' | format(loop.index) }}</span>
+    <div class="tt-mit-action">{{ m.action }}</div>
+    <div class="tt-mit-owner">{{ m.owner_shape }} · by {{ m.by }}</div>
+  </div>
+  {% endfor %}
+</div>

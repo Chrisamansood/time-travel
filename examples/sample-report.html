@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time-Travel · Launch a SaaS MVP in 90 Days</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#111418;--card:#0d1117;--border:#1e2329;--divider:#2a3038;
+  --text:#F0F6FC;--muted:#444c56;--secondary:#9198a1;--accent:#00D26A;
+  --red:#f85149;--amber:#d29922;--green:#00D26A;
+  --mono:ui-monospace,'Courier New',monospace;
+  --sans:system-ui,-apple-system,sans-serif;
+}
+html{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6}
+body{max-width:1400px;margin:0 auto;padding:0 32px 48px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── top bar ─────────────────────────────────── */
+.tt-top{height:3px;background:var(--accent)}
+.tt-bot{height:2px;background:var(--accent);opacity:.35;margin-top:48px}
+
+/* ── header ──────────────────────────────────── */
+.tt-header{padding:32px 0 24px;border-bottom:1px solid var(--border)}
+.tt-header h1{font-family:var(--mono);font-size:1.1rem;font-weight:600;letter-spacing:.5px}
+.tt-header h1 .accent{color:var(--accent)}
+.tt-header-meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:.85rem;color:var(--secondary)}
+.tt-dl-links{display:flex;gap:16px;margin-top:12px}
+.tt-dl-links a{font-family:var(--mono);font-size:.8rem;color:var(--secondary);border:1px solid var(--border);padding:4px 12px}
+.tt-dl-links a:hover{color:var(--accent);border-color:var(--accent);text-decoration:none}
+
+/* ── section labels ──────────────────────────── */
+.tt-label{font-family:var(--mono);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:32px 0 16px}
+.tt-label::before{content:'// '}
+.tt-divider{border:none;border-top:1px solid var(--divider);margin:32px 0}
+
+/* ── confidence bar ──────────────────────────── */
+.tt-confidence{padding:24px 0;border-bottom:1px solid var(--border)}
+.tt-conf-row{display:flex;align-items:center;gap:16px;font-family:var(--mono);font-size:.95rem}
+.tt-conf-label{min-width:140px;color:var(--secondary)}
+.tt-conf-val{font-weight:700;min-width:48px;text-align:right}
+.tt-conf-bar{flex:1;height:8px;background:var(--border);position:relative}
+.tt-conf-fill{height:100%;transition:width .3s}
+.tt-conf-fill.unmit{background:var(--red)}
+.tt-conf-fill.mit{background:var(--accent)}
+.tt-conf-lift{font-family:var(--mono);font-size:.85rem;color:var(--accent);margin-top:8px}
+
+/* ── main layout ─────────────────────────────── */
+.tt-main{display:grid;grid-template-columns:200px 1fr;gap:0;margin-top:0;border-bottom:1px solid var(--border)}
+.tt-rail{border-right:1px solid var(--border);padding:24px 16px 24px 0}
+.tt-center{padding:24px 0 24px 24px}
+
+/* ── persona chips ───────────────────────────── */
+.tt-chip{font-family:var(--mono);font-size:.8rem;color:var(--secondary);padding:6px 0;border-bottom:1px solid var(--border)}
+.tt-chip:last-child{border-bottom:none}
+
+/* ── horizon dots ────────────────────────────── */
+.tt-horizon{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.8rem;color:var(--secondary);padding:4px 0}
+.tt-hdot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.tt-hdot.h-short{background:var(--red)}
+.tt-hdot.h-mid{background:var(--amber)}
+.tt-hdot.h-long{background:var(--green)}
+
+/* ── tab bar ─────────────────────────────────── */
+.tt-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.tt-tab{font-family:var(--mono);font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:var(--secondary);padding:8px 16px;cursor:pointer;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none}
+.tt-tab:hover{color:var(--text)}
+.tt-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tt-tabpanel{display:none}
+.tt-tabpanel.active{display:block}
+
+/* ── risk cards ──────────────────────────────── */
+.tt-risk{background:var(--card);border:1px solid var(--border);padding:16px 20px;margin-bottom:12px}
+.tt-risk-head{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.tt-risk-num{font-family:var(--mono);font-size:1.4rem;font-weight:700;color:var(--accent)}
+.tt-risk-title{font-family:var(--mono);font-size:.95rem;font-weight:600}
+.tt-risk-desc{font-size:.9rem;color:var(--secondary);margin-bottom:12px;line-height:1.5}
+.tt-risk-meta{display:flex;gap:24px;flex-wrap:wrap;font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.tt-risk-meta span{display:flex;align-items:center;gap:4px}
+
+/* ── severity dots ───────────────────────────── */
+.tt-sev{display:flex;gap:16px;margin:12px 0;flex-wrap:wrap}
+.tt-si{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.tt-d{width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block}
+.tt-d.r{background:var(--red)}
+.tt-d.a{background:var(--amber)}
+.tt-d.g{background:var(--green)}
+
+/* ── inflated / buried cards ─────────────────── */
+.tt-inflated .tt-risk-num{color:var(--amber)}
+.tt-buried .tt-risk-num{color:var(--secondary)}
+
+/* ── user pov grid ───────────────────────────── */
+.tt-userpov{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.tt-pov-card{background:var(--card);border:1px solid var(--border);padding:16px 20px}
+.tt-pov-label{font-family:var(--mono);font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.tt-pov-text{font-size:.9rem;color:var(--text);line-height:1.5}
+
+/* ── mitigations grid ────────────────────────── */
+.tt-mits{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.tt-mit{background:var(--card);border:1px solid var(--border);padding:14px 18px}
+.tt-mit-num{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:700}
+.tt-mit-action{font-size:.85rem;color:var(--text);margin-top:4px}
+.tt-mit-owner{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-top:6px}
+
+/* ── evidence & methodology ──────────────────── */
+.tt-bottom{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px}
+.tt-evidence-item{border-bottom:1px solid var(--border);padding:12px 0}
+.tt-evidence-item:last-child{border-bottom:none}
+.tt-ev-title{font-family:var(--mono);font-size:.85rem;font-weight:600}
+.tt-ev-detail{font-size:.8rem;color:var(--secondary);margin-top:4px}
+.tt-method-row{font-family:var(--mono);font-size:.8rem;color:var(--secondary);padding:4px 0}
+.tt-method-row .k{color:var(--muted)}
+.tt-method-row .v{color:var(--text)}
+
+/* ── footer ──────────────────────────────────── */
+.tt-footer{border-top:1px solid var(--border);padding:24px 0;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.8rem;color:var(--secondary)}
+.tt-footer-links{display:flex;gap:16px}
+.tt-footer-links a{color:var(--secondary)}
+.tt-footer-links a:hover{color:var(--accent)}
+
+/* ── narrow screen notice ────────────────────── */
+.tt-narrow{display:none;font-family:var(--mono);font-size:.85rem;color:var(--muted);text-align:center;padding:48px 24px}
+@media(max-width:900px){
+  .tt-narrow{display:block}
+  .tt-top,.tt-header,.tt-confidence,.tt-main,.tt-userpov,.tt-mits,.tt-bottom,.tt-footer,.tt-bot,
+  .tt-label,.tt-divider,.tt-dl-links{display:none}
+}
+
+</style>
+</head>
+<body>
+<div class="tt-narrow">// BEST VIEWED AT ≥1200px WIDTH</div>
+<div class="tt-top"></div>
+
+<div class="tt-header">
+  <h1><span class="accent">&gt;</span> TIME-TRAVEL <span class="accent">·</span> Launch a SaaS MVP in 90 Days</h1>
+  <div class="tt-header-meta">
+    <span>2026-05-26 14:00 · 6 PERSONAS</span>
+    <span>T+3mo, T+6mo, T+12mo</span>
+  </div>
+  <div class="tt-dl-links">
+    <a href="report.md">↓ report.md</a>
+    <a href="exec.md">↓ exec.md</a>
+  </div>
+</div>
+
+<div class="tt-confidence">
+  <div class="tt-conf-row">
+    <span class="tt-conf-label">UNMITIGATED</span>
+    <span class="tt-conf-val" style="color:var(--red)">35%</span>
+    <div class="tt-conf-bar"><div class="tt-conf-fill unmit" style="width:35%"></div></div>
+  </div>
+  <div class="tt-conf-row" style="margin-top:8px">
+    <span class="tt-conf-label">MITIGATED</span>
+    <span class="tt-conf-val" style="color:var(--accent)">62%</span>
+    <div class="tt-conf-bar"><div class="tt-conf-fill mit" style="width:62%"></div></div>
+  </div>
+  <div class="tt-conf-lift">▲ 27pp lift · 5 mitigations applied</div>
+</div>
+
+
+<div class="tt-main">
+  <div class="tt-rail">
+    <div class="tt-label">PERSONAS</div>
+    
+    <div class="tt-chip">Skeptical-Money</div>
+    
+    <div class="tt-chip">Frustrated-End-User</div>
+    
+    <div class="tt-chip">Change-Resister</div>
+    
+    <div class="tt-chip">Ops-Engineer</div>
+    
+    <div class="tt-chip">Competitor-Strategist</div>
+    
+    <div class="tt-chip">AI-Optimism Auditor</div>
+    
+
+    <div class="tt-label" style="margin-top:24px">HORIZONS</div>
+    
+    <div class="tt-horizon">
+      <span class="tt-hdot h-short"></span>
+      T+3mo
+    </div>
+    
+    <div class="tt-horizon">
+      <span class="tt-hdot h-mid"></span>
+      T+6mo
+    </div>
+    
+    <div class="tt-horizon">
+      <span class="tt-hdot h-long"></span>
+      T+12mo
+    </div>
+    
+  </div>
+  <div class="tt-center">
+    
+
+<div class="tt-tabs">
+  <button class="tt-tab active" data-target="tab-confirmed">CONFIRMED 5</button>
+  <button class="tt-tab" data-target="tab-inflated">INFLATED 2</button>
+  <button class="tt-tab" data-target="tab-buried">BURIED 2</button>
+</div>
+
+<div id="tab-confirmed" class="tt-tabpanel active">
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">01</span>
+      <span class="tt-risk-title">Stripe integration timeline underestimated</span>
+    </div>
+    <div class="tt-sev">
+      
+<div class="tt-si">
+  <span class="tt-sl">T</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">U</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">B</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">O</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">F</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">S</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+    </div>
+    <div class="tt-risk-meta">
+      <span>High</span>
+      <span>Block</span>
+      <span>Founding engineer</span>
+    </div>
+    <div class="tt-risk-desc" style="margin-top:8px">Start Stripe integration in week 1, not week 3</div>
+  </div>
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">02</span>
+      <span class="tt-risk-title">Single engineer as single point of failure</span>
+    </div>
+    <div class="tt-sev">
+      
+<div class="tt-si">
+  <span class="tt-sl">T</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">U</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">B</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">O</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">F</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">S</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+    </div>
+    <div class="tt-risk-meta">
+      <span>High</span>
+      <span>Patch-fast</span>
+      <span>Founder / hiring manager</span>
+    </div>
+    <div class="tt-risk-desc" style="margin-top:8px">Hire a part-time contractor for ops and QA</div>
+  </div>
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">03</span>
+      <span class="tt-risk-title">No monitoring or incident response</span>
+    </div>
+    <div class="tt-sev">
+      
+<div class="tt-si">
+  <span class="tt-sl">T</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">U</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">B</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">O</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">F</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">S</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+    </div>
+    <div class="tt-risk-meta">
+      <span>High</span>
+      <span>Block</span>
+      <span>Ops-Engineer / founding engineer</span>
+    </div>
+    <div class="tt-risk-desc" style="margin-top:8px">Deploy basic uptime monitoring and alerting before beta</div>
+  </div>
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">04</span>
+      <span class="tt-risk-title">Beta user churn from poor onboarding</span>
+    </div>
+    <div class="tt-sev">
+      
+<div class="tt-si">
+  <span class="tt-sl">T</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">U</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">B</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">O</span>
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">F</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">S</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+    </div>
+    <div class="tt-risk-meta">
+      <span>Medium</span>
+      <span>Patch-fast</span>
+      <span>Product / founding engineer</span>
+    </div>
+    <div class="tt-risk-desc" style="margin-top:8px">Build guided onboarding wizard before beta launch</div>
+  </div>
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">05</span>
+      <span class="tt-risk-title">Success metrics are unfalsifiable</span>
+    </div>
+    <div class="tt-sev">
+      
+<div class="tt-si">
+  <span class="tt-sl">T</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">U</span>
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">B</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">O</span>
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">F</span>
+  
+    
+      <span class="tt-d a"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+    
+      <span class="tt-d"></span>
+    
+  
+</div>
+
+      
+<div class="tt-si">
+  <span class="tt-sl">S</span>
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+    
+      <span class="tt-d r"></span>
+    
+  
+</div>
+
+    </div>
+    <div class="tt-risk-meta">
+      <span>High</span>
+      <span>Monitor</span>
+      <span>Founder / PM</span>
+    </div>
+    <div class="tt-risk-desc" style="margin-top:8px">Redefine all success metrics with baselines and measurement plans</div>
+  </div>
+  
+</div>
+
+<div id="tab-inflated" class="tt-tabpanel tt-inflated">
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">01</span>
+      <span class="tt-risk-title">Competitor launches free tier</span>
+    </div>
+    <div class="tt-risk-desc">Free tiers rarely convert enterprise buyers. Our 10 beta users are hand-picked design partners, not price-sensitive prospects. The competitive threat is real at 12mo but inflated at 3mo.</div>
+  </div>
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">02</span>
+      <span class="tt-risk-title">Database scaling limits</span>
+    </div>
+    <div class="tt-risk-desc">At 10 users, database load is negligible. This becomes real only if the launch drives unexpected viral traffic, which the plan does not forecast.</div>
+  </div>
+  
+</div>
+
+<div id="tab-buried" class="tt-tabpanel tt-buried">
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">01</span>
+      <span class="tt-risk-title">Founder burnout</span>
+    </div>
+    <div class="tt-risk-desc">The founding engineer is also the CEO. Nobody in the room will tell them they're overcommitted.</div>
+    <div class="tt-risk-desc" style="color:var(--accent);margin-top:4px">↳ Ask: 'What does a sustainable week look like for you in month 3?'</div>
+  </div>
+  
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">02</span>
+      <span class="tt-risk-title">Investor patience is shorter than stated</span>
+    </div>
+    <div class="tt-risk-desc">The investor said '90 days' but their actual threshold is 'visible traction by week 6'. Nobody wants to name the real deadline.</div>
+    <div class="tt-risk-desc" style="color:var(--accent);margin-top:4px">↳ Ask the investor directly: 'What would make you uncomfortable at week 6?'</div>
+  </div>
+  
+</div>
+
+  </div>
+</div>
+
+<div class="tt-label">USER POV</div>
+<div class="tt-userpov">
+  <div class="tt-pov-card">
+    <div class="tt-pov-label">What they thought they were getting</div>
+    <div class="tt-pov-text">A fast, focused product they can rely on from day one</div>
+  </div>
+  <div class="tt-pov-card">
+    <div class="tt-pov-label">Would forgive</div>
+    <div class="tt-pov-text">Rough edges in the UI if core features work reliably</div>
+  </div>
+  <div class="tt-pov-card">
+    <div class="tt-pov-label">Untrustworthy if</div>
+    <div class="tt-pov-text">If billing breaks or data disappears — trust is gone instantly</div>
+  </div>
+  <div class="tt-pov-card">
+    <div class="tt-pov-label">Predictable complaints</div>
+    <div class="tt-pov-text">Why is onboarding so confusing? Where are the docs? Why did my export fail?</div>
+  </div>
+</div>
+
+<div class="tt-label">MITIGATIONS THIS WEEK</div>
+<div class="tt-mits">
+  
+  <div class="tt-mit">
+    <span class="tt-mit-num">01</span>
+    <div class="tt-mit-action">Start Stripe integration in week 1, not week 3. Allocate 2 full weeks.</div>
+    <div class="tt-mit-owner">Founding engineer · by End of week 2</div>
+  </div>
+  
+  <div class="tt-mit">
+    <span class="tt-mit-num">02</span>
+    <div class="tt-mit-action">Hire a part-time contractor for ops and QA by week 3</div>
+    <div class="tt-mit-owner">Founder · by Week 3</div>
+  </div>
+  
+  <div class="tt-mit">
+    <span class="tt-mit-num">03</span>
+    <div class="tt-mit-action">Deploy Uptime Robot + PagerDuty before beta launch</div>
+    <div class="tt-mit-owner">Founding engineer · by Week 10</div>
+  </div>
+  
+  <div class="tt-mit">
+    <span class="tt-mit-num">04</span>
+    <div class="tt-mit-action">Build and user-test a 3-step onboarding wizard</div>
+    <div class="tt-mit-owner">Founding engineer · by Week 9</div>
+  </div>
+  
+  <div class="tt-mit">
+    <span class="tt-mit-num">05</span>
+    <div class="tt-mit-action">Redefine success metrics: 'paying' = monthly subscriber; NPS baseline from beta week 1</div>
+    <div class="tt-mit-owner">Founder / PM · by Week 1</div>
+  </div>
+  
+</div>
+
+<div class="tt-bottom">
+  <div>
+    <div class="tt-label">EVIDENCE &amp; ANALOGUES</div>
+    
+    <div class="tt-evidence-item">
+      <div class="tt-ev-title">Color Labs shutdown (90-day SaaS failure)</div>
+      <div class="tt-ev-detail">Color Labs (seed-stage startup) · 2023 — Nearly identical timeline and team structure. Same Stripe underestimation pattern.</div>
+    </div>
+    
+    <div class="tt-evidence-item">
+      <div class="tt-ev-title">Basecamp's 'Shape Up' on timeline risk</div>
+      <div class="tt-ev-detail">Basecamp · 2019 — The 90-day plan has no scope-cut mechanism. When timeline slips, everything slips.</div>
+    </div>
+    
+    <div class="tt-evidence-item">
+      <div class="tt-ev-title">Startup founder burnout study (Gallup)</div>
+      <div class="tt-ev-detail">Gallup / Harvard Business School · 2024 — The plan assumes one engineer carries backend solo for 12 weeks. This matches the burnout risk profile exactly.</div>
+    </div>
+    
+  </div>
+  <div>
+    <div class="tt-label">METHODOLOGY</div>
+    <div class="tt-method-row"><span class="k">source </span><span class="v">examples/sample-plan.md</span></div>
+    <div class="tt-method-row"><span class="k">personas </span><span class="v">6</span></div>
+    <div class="tt-method-row"><span class="k">horizons </span><span class="v">3mo, 6mo, 12mo</span></div>
+    <div class="tt-method-row"><span class="k">report_id </span><span class="v">2026-05-26-1400-launch-saas-mvp</span></div>
+    
+    <div class="tt-method-row"><span class="k">--fast </span><span class="v">false</span></div>
+    
+    <div class="tt-method-row"><span class="k">--for_exec </span><span class="v">true</span></div>
+    
+    <div class="tt-method-row"><span class="k">--ai_source </span><span class="v">false</span></div>
+    
+    <div class="tt-method-row"><span class="k">--no_process_log </span><span class="v">false</span></div>
+    
+  </div>
+</div>
+
+<div class="tt-footer">
+  <span>Chris Sood · Agentic AI Strategy</span>
+  <div class="tt-footer-links">
+    <a href="https://x.com/Sood_Chris">X</a>
+    <a href="https://chrisamansood.medium.com/">Medium</a>
+    <a href="https://www.linkedin.com/in/chrisamansood/">LinkedIn</a>
+  </div>
+</div>
+
+
+<div class="tt-bot"></div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var tabs=document.querySelectorAll('.tt-tab');
+  var panels=document.querySelectorAll('.tt-tabpanel');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click',function(){
+      tabs.forEach(function(t){t.classList.remove('active')});
+      panels.forEach(function(p){p.classList.remove('active')});
+      tab.classList.add('active');
+      var target=document.getElementById(tab.getAttribute('data-target'));
+      if(target)target.classList.add('active');
+    });
+  });
+});
+
+</script>
+</body>
+</html>
