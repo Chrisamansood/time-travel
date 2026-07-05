@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 from time_travel.providers.base import LLMProvider
 
@@ -22,16 +23,17 @@ class OpenAIProvider(LLMProvider):
         model: str | None = None,
         max_tokens: int = 4096,
     ) -> str:
-        messages = []
+        messages: list[dict[str, str]] = []
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
         response = await self._client.chat.completions.create(
             model=model or self.default_model,
-            messages=messages,
+            messages=messages,  # type: ignore[arg-type]
             max_tokens=max_tokens,
         )
-        return response.choices[0].message.content
+        content: Any = response.choices[0].message.content
+        return content or ""
 
     async def complete_parallel(
         self,

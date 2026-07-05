@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 from time_travel.providers.base import LLMProvider
 
@@ -22,16 +23,16 @@ class GeminiProvider(LLMProvider):
         model: str | None = None,
         max_tokens: int = 4096,
     ) -> str:
-        config = {"max_output_tokens": max_tokens}
+        config: dict[str, Any] = {"max_output_tokens": max_tokens}
         if system:
             config["system_instruction"] = system
         response = await asyncio.to_thread(
             self._client.models.generate_content,
             model=model or self.default_model,
             contents=prompt,
-            config=config,
+            config=config,  # type: ignore[arg-type]
         )
-        return response.text
+        return response.text or ""
 
     async def complete_parallel(
         self,

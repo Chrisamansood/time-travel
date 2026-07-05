@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 from time_travel.providers.base import LLMProvider
 
@@ -22,7 +23,7 @@ class AnthropicProvider(LLMProvider):
         model: str | None = None,
         max_tokens: int = 4096,
     ) -> str:
-        kwargs: dict = {
+        kwargs: dict[str, Any] = {
             "model": model or self.default_model,
             "max_tokens": max_tokens,
             "messages": [{"role": "user", "content": prompt}],
@@ -32,7 +33,8 @@ class AnthropicProvider(LLMProvider):
                 {"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}
             ]
         response = await self._client.messages.create(**kwargs)
-        return response.content[0].text
+        text: str = response.content[0].text
+        return text
 
     async def complete_parallel(
         self,
