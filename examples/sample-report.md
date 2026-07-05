@@ -47,7 +47,7 @@
 ### 01. Stripe integration timeline underestimated
 
 - **Likelihood:** High · **Urgency:** Block
-- **Severity:** T=2 U=1 B=2 O=1 F=3 S=1
+- **Severity:** Tc=2 Fi=3 Tr=2 Up=1 Op=1 St=1
 - **Tripwire:** Stripe integration not code-complete by end of week 3
 - **Change my mind:** Prior Stripe integration experience on this exact stack
 - **Mitigation:** Start Stripe integration in week 1, not week 3
@@ -58,7 +58,7 @@
 ### 02. Single engineer as single point of failure
 
 - **Likelihood:** High · **Urgency:** Patch-fast
-- **Severity:** T=1 U=2 B=3 O=3 F=2 S=3
+- **Severity:** Tc=3 Fi=2 Tr=1 Up=2 Op=3 St=3
 - **Tripwire:** Engineer works >60 hours in any 2-week period
 - **Change my mind:** Second engineer hired and onboarded before week 4
 - **Mitigation:** Hire a part-time contractor for ops and QA
@@ -69,7 +69,7 @@
 ### 03. No monitoring or incident response
 
 - **Likelihood:** High · **Urgency:** Block
-- **Severity:** T=3 U=2 B=1 O=3 F=1 S=2
+- **Severity:** Tc=1 Fi=1 Tr=3 Up=2 Op=3 St=2
 - **Tripwire:** First customer-reported outage with no internal alert
 - **Change my mind:** Monitoring stack deployed before beta launch
 - **Mitigation:** Deploy basic uptime monitoring and alerting before beta
@@ -80,7 +80,7 @@
 ### 04. Beta user churn from poor onboarding
 
 - **Likelihood:** Medium · **Urgency:** Patch-fast
-- **Severity:** T=2 U=3 B=1 O=0 F=2 S=2
+- **Severity:** Tc=1 Fi=2 Tr=2 Up=3 Op=0 St=2
 - **Tripwire:** More than 2 of 10 beta users churn in first 2 weeks
 - **Change my mind:** Dedicated onboarding flow tested with 3 users before beta
 - **Mitigation:** Build guided onboarding wizard before beta launch
@@ -91,7 +91,7 @@
 ### 05. Success metrics are unfalsifiable
 
 - **Likelihood:** High · **Urgency:** Monitor
-- **Severity:** T=1 U=0 B=3 O=0 F=1 S=3
+- **Severity:** Tc=3 Fi=1 Tr=1 Up=0 Op=0 St=3
 - **Tripwire:** Team cannot agree on whether Q3 was a success or failure
 - **Change my mind:** Metrics redefined with baselines and measurement methodology before week 2
 - **Mitigation:** Redefine all success metrics with baselines and measurement plans

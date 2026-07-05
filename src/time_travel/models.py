@@ -17,16 +17,16 @@ from marshmallow import fields as mm_fields
 @dataclass_json
 @dataclass
 class SeverityScore:
-    """Six-axis severity score (each axis 0-3).
+    """Six-axis severity score (each axis 0-3), per claims schema v1.
 
-    T: Trust damage   U: User pain     B: Blind-spot
-    O: Ops load       F: Financial     S: Strategic
+    Technical  Financial  Trust     User pain
+    Ops load   Strategic
     """
+    technical: int = 0
+    financial: int = 0
     trust: int = 0
     user_pain: int = 0
-    blind_spot: int = 0
     ops_load: int = 0
-    financial: int = 0
     strategic: int = 0
 
 

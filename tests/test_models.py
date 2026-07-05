@@ -44,7 +44,7 @@ def make_minimal_report():
                 id=1,
                 name="Budget Overrun",
                 severity=SeverityScore(
-                    trust=1, user_pain=0, blind_spot=2, ops_load=1, financial=3, strategic=2
+                    technical=2, financial=3, trust=1, user_pain=0, ops_load=1, strategic=2
                 ),
                 likelihood="High",
                 urgency="Block",

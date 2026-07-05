@@ -188,8 +188,8 @@ def _persona_call(persona: Persona, plan_text: str) -> dict[str, str]:
     )
     prompt = (
         "Given this plan, return a strict JSON array of risk objects, each with: "
-        "name, severity (object with trust, user_pain, blind_spot, ops_load, "
-        'financial, strategic — each 0-3), likelihood ("Low"|"Medium"|"High"), '
+        "name, severity (object with technical, financial, trust, user_pain, "
+        'ops_load, strategic — each 0-3), likelihood ("Low"|"Medium"|"High"), '
         "tripwire, change_my_mind, mitigation_summary, owner_shape, "
         f"citations (array of strings).\n\nPlan:\n{plan_text}"
     )
@@ -216,11 +216,11 @@ async def _phase3_persona_fanout(
                     persona=persona.name,
                     name=item.get("name", ""),
                     severity=SeverityScore(
+                        technical=sev.get("technical", 0),
+                        financial=sev.get("financial", 0),
                         trust=sev.get("trust", 0),
                         user_pain=sev.get("user_pain", 0),
-                        blind_spot=sev.get("blind_spot", 0),
                         ops_load=sev.get("ops_load", 0),
-                        financial=sev.get("financial", 0),
                         strategic=sev.get("strategic", 0),
                     ),
                     likelihood=item.get("likelihood", "Medium"),

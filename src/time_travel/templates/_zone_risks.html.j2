@@ -25,12 +25,12 @@
       <span class="tt-risk-title">{{ risk.name }}</span>
     </div>
     <div class="tt-sev">
-      {{ severity_dots('T', risk.severity.trust) }}
-      {{ severity_dots('U', risk.severity.user_pain) }}
-      {{ severity_dots('B', risk.severity.blind_spot) }}
-      {{ severity_dots('O', risk.severity.ops_load) }}
-      {{ severity_dots('F', risk.severity.financial) }}
-      {{ severity_dots('S', risk.severity.strategic) }}
+      {{ severity_dots('Tc', risk.severity.technical) }}
+      {{ severity_dots('Fi', risk.severity.financial) }}
+      {{ severity_dots('Tr', risk.severity.trust) }}
+      {{ severity_dots('Up', risk.severity.user_pain) }}
+      {{ severity_dots('Op', risk.severity.ops_load) }}
+      {{ severity_dots('St', risk.severity.strategic) }}
     </div>
     <div class="tt-risk-meta">
       <span>{{ risk.likelihood }}</span>

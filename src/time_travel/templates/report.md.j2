@@ -37,7 +37,7 @@
 ### {{ '%02d' | format(risk.id) }}. {{ risk.name }}
 
 - **Likelihood:** {{ risk.likelihood }} · **Urgency:** {{ risk.urgency }}
-- **Severity:** T={{ risk.severity.trust }} U={{ risk.severity.user_pain }} B={{ risk.severity.blind_spot }} O={{ risk.severity.ops_load }} F={{ risk.severity.financial }} S={{ risk.severity.strategic }}
+- **Severity:** Tc={{ risk.severity.technical }} Fi={{ risk.severity.financial }} Tr={{ risk.severity.trust }} Up={{ risk.severity.user_pain }} Op={{ risk.severity.ops_load }} St={{ risk.severity.strategic }}
 - **Tripwire:** {{ risk.tripwire }}
 - **Change my mind:** {{ risk.change_my_mind }}
 - **Mitigation:** {{ risk.mitigation_summary }}

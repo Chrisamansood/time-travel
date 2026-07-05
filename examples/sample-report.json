@@ -54,7 +54,7 @@
     {
       "id": 1,
       "name": "Stripe integration timeline underestimated",
-      "severity": {"trust": 2, "user_pain": 1, "blind_spot": 2, "ops_load": 1, "financial": 3, "strategic": 1},
+      "severity": {"technical": 2, "financial": 3, "trust": 2, "user_pain": 1, "ops_load": 1, "strategic": 1},
       "likelihood": "High",
       "urgency": "Block",
       "tripwire": "Stripe integration not code-complete by end of week 3",
@@ -66,7 +66,7 @@
     {
       "id": 2,
       "name": "Single engineer as single point of failure",
-      "severity": {"trust": 1, "user_pain": 2, "blind_spot": 3, "ops_load": 3, "financial": 2, "strategic": 3},
+      "severity": {"technical": 3, "financial": 2, "trust": 1, "user_pain": 2, "ops_load": 3, "strategic": 3},
       "likelihood": "High",
       "urgency": "Patch-fast",
       "tripwire": "Engineer works >60 hours in any 2-week period",
@@ -78,7 +78,7 @@
     {
       "id": 3,
       "name": "No monitoring or incident response",
-      "severity": {"trust": 3, "user_pain": 2, "blind_spot": 1, "ops_load": 3, "financial": 1, "strategic": 2},
+      "severity": {"technical": 1, "financial": 1, "trust": 3, "user_pain": 2, "ops_load": 3, "strategic": 2},
       "likelihood": "High",
       "urgency": "Block",
       "tripwire": "First customer-reported outage with no internal alert",
@@ -90,7 +90,7 @@
     {
       "id": 4,
       "name": "Beta user churn from poor onboarding",
-      "severity": {"trust": 2, "user_pain": 3, "blind_spot": 1, "ops_load": 0, "financial": 2, "strategic": 2},
+      "severity": {"technical": 1, "financial": 2, "trust": 2, "user_pain": 3, "ops_load": 0, "strategic": 2},
       "likelihood": "Medium",
       "urgency": "Patch-fast",
       "tripwire": "More than 2 of 10 beta users churn in first 2 weeks",
@@ -102,7 +102,7 @@
     {
       "id": 5,
       "name": "Success metrics are unfalsifiable",
-      "severity": {"trust": 1, "user_pain": 0, "blind_spot": 3, "ops_load": 0, "financial": 1, "strategic": 3},
+      "severity": {"technical": 3, "financial": 1, "trust": 1, "user_pain": 0, "ops_load": 0, "strategic": 3},
       "likelihood": "High",
       "urgency": "Monitor",
       "tripwire": "Team cannot agree on whether Q3 was a success or failure",
