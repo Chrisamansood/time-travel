@@ -13,6 +13,11 @@
 <div class="tt-top"></div>
 
 {% include '_zone_header.html.j2' %}
+{% include '_zone_exec_summary.html.j2' %}
+
+<details class="tt-details">
+<summary>Full report (risk table, personas, mitigations, evidence)</summary>
+
 {% include '_zone_confidence.html.j2' %}
 
 <div class="tt-main">
@@ -38,6 +43,9 @@
 {% include '_zone_userpov.html.j2' %}
 {% include '_zone_mitigations.html.j2' %}
 {% include '_zone_evidence.html.j2' %}
+
+</details>
+
 {% include '_zone_footer.html.j2' %}
 
 <div class="tt-bot"></div>

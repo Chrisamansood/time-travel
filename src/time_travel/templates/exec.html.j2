@@ -18,16 +18,19 @@ footer{margin-top:32px;padding-top:12px;border-top:1px solid #1e2329;color:#444c
 <div class="tt-eyebrow">&gt; TIME-TRAVEL EXEC SUMMARY</div>
 <h1>{{ report.plan_title }}</h1>
 <div>{{ report.generated_at.strftime('%Y-%m-%d') }} · {{ report.personas | length }} personas</div>
+<p>{{ tldr }}</p>
 <div class="tt-conf">Confidence: {{ unmitigated_band }} unmitigated &rarr; {{ mitigated_band }} mitigated<br>{{ confidence_drivers }}</div>
+{% if top_risks %}
 <h2>Top Risks</h2>
 <ol>
-{% for risk in report.confirmed_risks[:3] %}
+{% for risk in top_risks %}
   <li><strong>{{ risk.name }}</strong> ({{ risk.likelihood }}, {{ risk.urgency }}) — {{ risk.mitigation_summary }}</li>
 {% endfor %}
 </ol>
-{% if report.buried_risks %}
+{% endif %}
+{% if one_buried_risk %}
 <h2>Buried Risk</h2>
-<div>{{ report.buried_risks[0].name }}: {{ report.buried_risks[0].why_unspoken }}</div>
+<div>{{ one_buried_risk.name }}: {{ one_buried_risk.why_unspoken }}</div>
 {% endif %}
 <footer>Full report: report.md · Dashboard: report.html</footer>
 </body>

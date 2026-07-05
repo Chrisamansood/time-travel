@@ -318,3 +318,56 @@ def confidence_render_context(
         "mitigated_band": confidence_band(mitigated_confidence),
         "confidence_drivers": confidence_drivers(confirmed_risks),
     }
+
+
+_URGENCY_RANK = {"Block": 0, "Patch-fast": 1, "Monitor": 2}
+_LIKELIHOOD_RANK = {"High": 0, "Medium": 1, "Low": 2}
+
+
+def rank_confirmed_risks(confirmed_risks: list[Risk]) -> list[Risk]:
+    """Order for the exec summary's top-risks pick, per classification.md:
+    Block first, then by severity, then by likelihood."""
+    return sorted(
+        confirmed_risks,
+        key=lambda r: (
+            _URGENCY_RANK.get(r.urgency, 3),
+            -_severity_total(r.severity),
+            _LIKELIHOOD_RANK.get(r.likelihood, 3),
+        ),
+    )
+
+
+def build_tldr(
+    confirmed_risks: list[Risk], inflated_risks: list[InflatedRisk], buried_risks: list[BuriedRisk]
+) -> str:
+    """One-line summary of the risk landscape for the exec-first view."""
+    block_count = sum(1 for r in confirmed_risks if r.urgency == "Block")
+    risk_word = "risk" if len(confirmed_risks) == 1 else "risks"
+    tldr = (
+        f"{len(confirmed_risks)} confirmed {risk_word} ({block_count} at Block tier), "
+        f"{len(inflated_risks)} inflated, {len(buried_risks)} buried."
+    )
+    if block_count > 7:
+        tldr += (
+            " This plan has more blocking risks than a single premortem can carry"
+            " — reconsider scope or decompose before proceeding."
+        )
+    return tldr
+
+
+def exec_summary_context(
+    unmitigated_confidence: int,
+    mitigated_confidence: int,
+    confirmed_risks: list[Risk],
+    inflated_risks: list[InflatedRisk],
+    buried_risks: list[BuriedRisk],
+) -> dict[str, object]:
+    """Template context for the exec-first summary zone (audit resolution:
+    exec one-pager is the default view; full detail stays one click away)."""
+    context: dict[str, object] = dict(
+        confidence_render_context(unmitigated_confidence, mitigated_confidence, confirmed_risks)
+    )
+    context["tldr"] = build_tldr(confirmed_risks, inflated_risks, buried_risks)
+    context["top_risks"] = rank_confirmed_risks(confirmed_risks)[:3]
+    context["one_buried_risk"] = buried_risks[0] if buried_risks else None
+    return context

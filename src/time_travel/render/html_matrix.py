@@ -6,7 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from time_travel.models import Report
-from time_travel.synthesis import confidence_render_context
+from time_travel.synthesis import exec_summary_context
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
 
@@ -18,8 +18,12 @@ def render_html(report: Report) -> str:
         keep_trailing_newline=True,
     )
     template = env.get_template("report.html.j2")
-    context = confidence_render_context(
-        report.unmitigated_confidence, report.mitigated_confidence, report.confirmed_risks
+    context = exec_summary_context(
+        report.unmitigated_confidence,
+        report.mitigated_confidence,
+        report.confirmed_risks,
+        report.inflated_risks,
+        report.buried_risks,
     )
     return template.render(report=report, **context)
 

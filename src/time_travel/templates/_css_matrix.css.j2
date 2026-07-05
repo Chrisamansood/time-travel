@@ -29,6 +29,19 @@ a:hover{text-decoration:underline}
 .tt-label::before{content:'// '}
 .tt-divider{border:none;border-top:1px solid var(--divider);margin:32px 0}
 
+/* ── exec summary ─────────────────────────────── */
+.tt-exec{padding:24px 0;border-bottom:1px solid var(--border)}
+.tt-exec-tldr{font-size:1rem;line-height:1.5;margin-bottom:16px}
+.tt-exec-conf{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:.9rem;margin-bottom:16px}
+.tt-exec-drivers{color:var(--secondary);font-size:.8rem}
+.tt-exec-top ol{margin:8px 0 0 20px;font-size:.9rem;line-height:1.6}
+.tt-exec-buried{margin-top:16px;padding:12px 16px;background:var(--card);border:1px solid var(--border)}
+.tt-details{margin-top:0}
+.tt-details>summary{cursor:pointer;font-family:var(--mono);font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--secondary);padding:16px 0;list-style:none}
+.tt-details>summary::-webkit-details-marker{display:none}
+.tt-details>summary::before{content:'▸ ';color:var(--accent)}
+.tt-details[open]>summary::before{content:'▾ '}
+
 /* ── confidence bar ──────────────────────────── */
 .tt-confidence{padding:24px 0;border-bottom:1px solid var(--border)}
 .tt-conf-row{display:flex;align-items:center;gap:16px;font-family:var(--mono);font-size:.95rem}

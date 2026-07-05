@@ -103,6 +103,37 @@ def test_render_html_self_contained():
     assert "cdn" not in html.lower()
 
 
+def test_render_html_has_exec_summary_with_tldr_and_top_risks():
+    report = _load_fixture()
+    html = render_html(report)
+    assert "EXEC SUMMARY" in html
+    assert "TOP RISKS" in html
+    ranked = report.confirmed_risks[:3]
+    for risk in ranked:
+        # top risk names appear before the collapsible "Full report" section
+        assert html.index(risk.name) < html.index("Full report")
+
+
+def test_render_html_exec_summary_shows_one_buried_risk():
+    report = _load_fixture()
+    html = render_html(report)
+    if report.buried_risks:
+        assert "BURIED RISK" in html
+        assert html.index(report.buried_risks[0].name) < html.index("Full report")
+
+
+def test_render_html_wraps_full_detail_in_collapsible_details():
+    html = render_html(_load_fixture())
+    assert "<details" in html
+    assert "<summary>" in html
+
+
+def test_render_html_no_line_over_2000_chars():
+    html = render_html(_load_fixture())
+    longest = max(len(line) for line in html.splitlines())
+    assert longest <= 2000, f"longest line is {longest} chars"
+
+
 def test_render_html_to_file(tmp_path):
     report = _load_fixture()
     out = tmp_path / "output" / "report.html"
