@@ -1,0 +1,24 @@
+<div class="tt-exec">
+  <div class="tt-label">EXEC SUMMARY</div>
+  <div class="tt-exec-tldr">{{ tldr }}</div>
+  <div class="tt-exec-conf">
+    <span>Confidence: <strong style="color:var(--red)">{{ unmitigated_band }}</strong> unmitigated &rarr; <strong style="color:var(--accent)">{{ mitigated_band }}</strong> mitigated</span>
+    <span class="tt-exec-drivers">{{ confidence_drivers }}</span>
+  </div>
+  {% if top_risks %}
+  <div class="tt-exec-top">
+    <div class="tt-pov-label">TOP RISKS</div>
+    <ol>
+      {% for risk in top_risks %}
+      <li><strong>{{ risk.name }}</strong> — {{ risk.likelihood }}, {{ risk.urgency }} — {{ risk.mitigation_summary }}</li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% endif %}
+  {% if one_buried_risk %}
+  <div class="tt-exec-buried">
+    <div class="tt-pov-label">BURIED RISK</div>
+    <div>{{ one_buried_risk.name }}: {{ one_buried_risk.why_unspoken }}</div>
+  </div>
+  {% endif %}
+</div>

@@ -184,17 +184,14 @@ If 1–2 patterns fire, note in the process log but don't add the persona — th
 
 ## Final-pass checklist
 
-Mirrored in `process-log-template.md`. Verify each before writing artifacts:
+Verify each before writing `claims.json` (classification, deduplication, confidence,
+and report formatting are the engine's job now — see `time-travel synthesize`):
 
-- [ ] No generic, plan-agnostic risks in the Confirmed table
+- [ ] No generic, plan-agnostic risk names ("scope creep", "team burnout")
+- [ ] Every claim's `mechanism` names how it fails, not just what fails
 - [ ] Severity scores reflect more than financial/ops dimensions
-- [ ] At least one Buried risk surfaced, OR re-examination logged
-- [ ] Every Confirmed risk has an observable tripwire
-- [ ] Every Confirmed risk has a "what would change my mind"
-- [ ] Rebuttal round produced substantive disagreement
-- [ ] Confirmed count ≤ 7 in the top table
-- [ ] Revised plan is an injection, not a rewrite
-- [ ] If `--for-exec`: exec artifact ≤ 300 words (mechanical count)
-- [ ] Confidence numbers rounded to nearest 5
-- [ ] Every score in the report traces to a persona output in the process log
+- [ ] At least one `blind_spot_candidate` or hedged claim captured
+- [ ] Every claim has an observable `tripwire`, not a vague one
+- [ ] Every claim has a specific `change_my_mind`
+- [ ] `--deep` only: rebuttal round produced substantive disagreement
 - [ ] Process log written unless `--no-process-log` is set

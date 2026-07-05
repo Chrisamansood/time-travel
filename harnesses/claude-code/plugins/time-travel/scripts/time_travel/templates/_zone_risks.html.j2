@@ -1,0 +1,68 @@
+{% macro severity_dots(label, score) %}
+<div class="tt-si">
+  <span class="tt-sl">{{ label }}</span>
+  {% for i in range(3) %}
+    {% if i < score %}
+      {% if score >= 2 %}<span class="tt-d r"></span>{% elif score == 1 %}<span class="tt-d a"></span>{% else %}<span class="tt-d g"></span>{% endif %}
+    {% else %}
+      <span class="tt-d"></span>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endmacro %}
+
+<div class="tt-tabs">
+  <button class="tt-tab active" data-target="tab-confirmed">CONFIRMED {{ report.confirmed_risks | length }}</button>
+  <button class="tt-tab" data-target="tab-inflated">INFLATED {{ report.inflated_risks | length }}</button>
+  <button class="tt-tab" data-target="tab-buried">BURIED {{ report.buried_risks | length }}</button>
+</div>
+
+<div id="tab-confirmed" class="tt-tabpanel active">
+  {% for risk in report.confirmed_risks %}
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">{{ '%02d' | format(risk.id) }}</span>
+      <span class="tt-risk-title">{{ risk.name }}</span>
+    </div>
+    <div class="tt-sev">
+      {{ severity_dots('Tc', risk.severity.technical) }}
+      {{ severity_dots('Fi', risk.severity.financial) }}
+      {{ severity_dots('Tr', risk.severity.trust) }}
+      {{ severity_dots('Up', risk.severity.user_pain) }}
+      {{ severity_dots('Op', risk.severity.ops_load) }}
+      {{ severity_dots('St', risk.severity.strategic) }}
+    </div>
+    <div class="tt-risk-meta">
+      <span>{{ risk.likelihood }}</span>
+      <span>{{ risk.urgency }}</span>
+      <span>{{ risk.owner_shape }}</span>
+    </div>
+    <div class="tt-risk-desc" style="margin-top:8px">{{ risk.mitigation_summary }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div id="tab-inflated" class="tt-tabpanel tt-inflated">
+  {% for risk in report.inflated_risks %}
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">{{ '%02d' | format(risk.id) }}</span>
+      <span class="tt-risk-title">{{ risk.name }}</span>
+    </div>
+    <div class="tt-risk-desc">{{ risk.why_downgraded }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div id="tab-buried" class="tt-tabpanel tt-buried">
+  {% for risk in report.buried_risks %}
+  <div class="tt-risk">
+    <div class="tt-risk-head">
+      <span class="tt-risk-num">{{ '%02d' | format(risk.id) }}</span>
+      <span class="tt-risk-title">{{ risk.name }}</span>
+    </div>
+    <div class="tt-risk-desc">{{ risk.why_unspoken }}</div>
+    <div class="tt-risk-desc" style="color:var(--accent);margin-top:4px">↳ {{ risk.how_to_surface }}</div>
+  </div>
+  {% endfor %}
+</div>

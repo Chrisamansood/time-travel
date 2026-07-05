@@ -1,0 +1,136 @@
+# Time-Travel Premortem: {{ report.plan_title }}
+
+> Generated {{ report.generated_at.strftime('%Y-%m-%d %H:%M') }} · {{ report.personas | length }} personas · T+{{ report.horizons | join(', T+') }}
+
+────────────────────────────────────────────────────────────────────────
+
+## Confidence
+
+- **Unmitigated:** {{ unmitigated_band }}
+- **Mitigated:** {{ mitigated_band }}
+- **Drivers:** {{ confidence_drivers }}, {{ report.mitigations | length }} mitigations applied
+
+────────────────────────────────────────────────────────────────────────
+
+## User POV
+
+| Lens | Assessment |
+|------|------------|
+| What they thought they were getting | {{ report.user_pov.thought_getting }} |
+| Would forgive | {{ report.user_pov.would_forgive }} |
+| Untrustworthy if | {{ report.user_pov.untrustworthy }} |
+| Predictable complaints | {{ report.user_pov.predictable_complaints }} |
+
+────────────────────────────────────────────────────────────────────────
+
+## Personas
+
+{% for p in report.personas %}
+- **{{ p.name }}** — {{ p.rationale }}
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Confirmed Risks
+
+{% for risk in report.confirmed_risks %}
+### {{ '%02d' | format(risk.id) }}. {{ risk.name }}
+
+- **Likelihood:** {{ risk.likelihood }} · **Urgency:** {{ risk.urgency }}
+- **Severity:** Tc={{ risk.severity.technical }} Fi={{ risk.severity.financial }} Tr={{ risk.severity.trust }} Up={{ risk.severity.user_pain }} Op={{ risk.severity.ops_load }} St={{ risk.severity.strategic }}
+- **Tripwire:** {{ risk.tripwire }}
+- **Change my mind:** {{ risk.change_my_mind }}
+- **Mitigation:** {{ risk.mitigation_summary }}
+- **Owner:** {{ risk.owner_shape }}
+{% if risk.citations %}- **Citations:** {{ risk.citations | join('; ') }}{% endif %}
+
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Inflated Risks
+
+{% for risk in report.inflated_risks %}
+### {{ '%02d' | format(risk.id) }}. {{ risk.name }}
+
+{{ risk.why_downgraded }}
+
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Buried Risks
+
+{% for risk in report.buried_risks %}
+### {{ '%02d' | format(risk.id) }}. {{ risk.name }}
+
+- **Why unspoken:** {{ risk.why_unspoken }}
+- **How to surface:** {{ risk.how_to_surface }}
+
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Rebuttal Round
+
+**Agreements:**
+{% for a in report.rebuttal.agreements %}
+- {{ a }}
+{% endfor %}
+
+**Disagreements:**
+{% for d in report.rebuttal.disagreements %}
+- {{ d }}
+{% endfor %}
+
+**Cascades:**
+{% for c in report.rebuttal.cascades %}
+- {{ c }}
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Mitigations
+
+| # | Action | Owner | By |
+|---|--------|-------|----|
+{% for m in report.mitigations %}
+| {{ '%02d' | format(m.risk_id) }} | {{ m.action }} | {{ m.owner_shape }} | {{ m.by }} |
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Revised Plan
+
+{{ report.revised_plan }}
+
+────────────────────────────────────────────────────────────────────────
+
+## Evidence & Analogues
+
+{% for e in report.evidence %}
+### {{ e.title }}
+
+- **Who:** {{ e.who }} · **When:** {{ e.when }}
+- **What happened:** {{ e.what_happened }}
+- **Why relevant:** {{ e.why_relevant }}
+- **Source:** {{ e.url }}
+
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+## Methodology
+
+- **Source:** {{ report.plan_source }}
+- **Report ID:** {{ report.report_id }}
+- **Personas:** {{ report.personas | length }}
+- **Horizons:** {{ report.horizons | join(', ') }}
+{% for flag, val in report.flags_used.items() %}
+- **--{{ flag }}:** {{ val | lower }}
+{% endfor %}
+
+────────────────────────────────────────────────────────────────────────
+
+*Chris Sood · Agentic AI Strategy*
+[X](https://x.com/Sood_Chris) · [Medium](https://chrisamansood.medium.com/) · [LinkedIn](https://www.linkedin.com/in/chrisamansood/)

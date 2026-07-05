@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "time-travel/claims/v1",
+  "title": "Time-Travel Persona Claims — interface between skill (Claude) and engine (Python)",
+  "$comment": "Claude emits this after the persona pass. Engine consumes it for dedup, classification, confidence, and rendering. Reconcile field names with the engine's existing PersonaRiskClaim/Report dataclasses during implementation — this schema is the target; adjust the dataclasses, not the schema, if they conflict.",
+  "type": "object",
+  "required": ["schema_version", "plan", "mode", "user_pov", "personas", "claims"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "mode": { "enum": ["fast", "deep"], "$comment": "fast = single structured call (Cowork default); deep = parallel fan-out + rebuttal" },
+    "plan": {
+      "type": "object",
+      "required": ["title", "goal", "timeline", "source_type"],
+      "properties": {
+        "title": { "type": "string", "maxLength": 120 },
+        "goal": { "type": "string", "maxLength": 400 },
+        "timeline": { "type": "string", "maxLength": 200 },
+        "source_type": { "enum": ["human", "ai_generated", "unknown"] },
+        "audience": { "type": "string", "maxLength": 120 },
+        "horizons": { "type": "array", "items": { "type": "string" }, "default": ["3mo", "6mo", "12mo"] }
+      }
+    },
+    "user_pov": {
+      "type": "object",
+      "$comment": "Phase 1 output. All fields ≤80 words each.",
+      "required": ["expectations", "forgivable", "trust_breakers"],
+      "properties": {
+        "expectations": { "type": "string" },
+        "forgivable": { "type": "string" },
+        "trust_breakers": { "type": "string" },
+        "predictable_complaints": { "type": "string" }
+      }
+    },
+    "blind_spot_candidates": {
+      "type": "array",
+      "$comment": "Politically-unspoken risk candidates. Engine uses these + hedged-language signals for the Buried bucket.",
+      "items": { "type": "string", "maxLength": 300 }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "what_happened", "why_relevant"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^E[0-9]+$" },
+          "title": { "type": "string" },
+          "url": { "type": "string" },
+          "when": { "type": "string" },
+          "who": { "type": "string" },
+          "what_happened": { "type": "string", "maxLength": 400 },
+          "why_relevant": { "type": "string", "maxLength": 200 }
+        }
+      }
+    },
+    "personas": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "pov"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^P[0-9]+$" },
+          "name": { "type": "string" },
+          "pov": { "type": "string", "maxLength": 200 },
+          "domain_specific": { "type": "boolean" }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["id", "persona_id", "name", "mechanism", "severity", "likelihood", "tripwire", "change_my_mind"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^C[0-9]+$" },
+          "persona_id": { "type": "string" },
+          "name": { "type": "string", "maxLength": 100, "$comment": "Canonical short name. Engine fuzzy-matches these across personas for family merging — do NOT rely on exact wording." },
+          "mechanism": { "type": "string", "maxLength": 300, "$comment": "HOW it fails, not just what. Engine keeps claims with different mechanisms separate even if names match." },
+          "narrative_horizon": { "enum": ["3mo", "6mo", "12mo", "other"] },
+          "severity": {
+            "type": "object",
+            "$comment": "The 6 lenses from severity-lenses.md, each 0-3. Engine merges families by per-lens max.",
+            "required": ["technical", "financial", "trust", "user_pain", "ops_load", "strategic"],
+            "additionalProperties": false,
+            "properties": {
+              "technical": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "financial": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "trust": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "user_pain": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "ops_load": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "strategic": { "type": "integer", "minimum": 0, "maximum": 3 }
+            }
+          },
+          "likelihood": { "enum": ["low", "medium", "high"] },
+          "tripwire": { "type": "string", "maxLength": 200, "$comment": "First OBSERVABLE field signal. Engine rejects claims with vague tripwires ('things get worse') via a keyword lint." },
+          "change_my_mind": { "type": "string", "maxLength": 200 },
+          "citations": {
+            "type": "array",
+            "items": { "type": "string", "$comment": "E-ids from evidence[], or 'internal:<signal in the plan itself>'" }
+          },
+          "internal_signal": { "type": "string", "maxLength": 200, "$comment": "Something already visible in the plan supporting this risk (counts as evidence per classification rules)" },
+          "hedged_language": { "type": "boolean", "$comment": "True if the persona expressed this indirectly/diplomatically — a Buried-bucket signal" },
+          "mitigation": { "type": "string", "maxLength": 250, "$comment": "Concrete action available this week" },
+          "owner_shape": { "type": "string", "maxLength": 80 }
+        }
+      }
+    },
+    "rebuttals": {
+      "type": "array",
+      "$comment": "Deep mode only. Cross-persona reactions after seeing the anonymized digest.",
+      "items": {
+        "type": "object",
+        "required": ["persona_id", "stance", "text"],
+        "properties": {
+          "persona_id": { "type": "string" },
+          "claim_id": { "type": "string" },
+          "stance": { "enum": ["agree", "disagree", "cascade"] },
+          "text": { "type": "string", "maxLength": 250 },
+          "cascade_target": { "type": "string", "$comment": "If stance=cascade: the claim id this one triggers" }
+        }
+      }
+    }
+  }
+}
