@@ -1,13 +1,13 @@
 <div class="tt-confidence">
   <div class="tt-conf-row">
     <span class="tt-conf-label">UNMITIGATED</span>
-    <span class="tt-conf-val" style="color:var(--red)">{{ report.unmitigated_confidence }}%</span>
-    <div class="tt-conf-bar"><div class="tt-conf-fill unmit" style="width:{{ report.unmitigated_confidence }}%"></div></div>
+    <span class="tt-conf-val" style="color:var(--red)">{{ unmitigated_band }}</span>
+    <div class="tt-conf-bar"><div class="tt-conf-fill unmit band-{{ unmitigated_band | lower }}"></div></div>
   </div>
   <div class="tt-conf-row" style="margin-top:8px">
     <span class="tt-conf-label">MITIGATED</span>
-    <span class="tt-conf-val" style="color:var(--accent)">{{ report.mitigated_confidence }}%</span>
-    <div class="tt-conf-bar"><div class="tt-conf-fill mit" style="width:{{ report.mitigated_confidence }}%"></div></div>
+    <span class="tt-conf-val" style="color:var(--accent)">{{ mitigated_band }}</span>
+    <div class="tt-conf-bar"><div class="tt-conf-fill mit band-{{ mitigated_band | lower }}"></div></div>
   </div>
-  <div class="tt-conf-lift">▲ {{ report.mitigated_confidence - report.unmitigated_confidence }}pp lift · {{ report.mitigations | length }} mitigations applied</div>
+  <div class="tt-conf-lift">{{ confidence_drivers }} · {{ report.mitigations | length }} mitigations applied</div>
 </div>

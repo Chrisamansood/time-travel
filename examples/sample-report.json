@@ -2,21 +2,43 @@
   "plan_title": "Launch a SaaS MVP in 90 Days",
   "plan_source": "examples/sample-plan.md",
   "generated_at": "2026-05-26T14:00:00",
-  "horizons": ["3mo", "6mo", "12mo"],
-  "plan_text": "Ship a working SaaS product with paying customers by end of Q3. Week 1–2: Finalize requirements. Week 3–8: Core dev. Week 9–10: QA. Week 11: Beta. Week 12: Launch.",
+  "horizons": [
+    "3mo",
+    "6mo",
+    "12mo"
+  ],
+  "plan_text": "Ship a working SaaS product with paying customers by end of Q3. Week 1\u20132: Finalize requirements. Week 3\u20138: Core dev. Week 9\u201310: QA. Week 11: Beta. Week 12: Launch.",
   "user_pov": {
     "thought_getting": "A fast, focused product they can rely on from day one",
     "would_forgive": "Rough edges in the UI if core features work reliably",
-    "untrustworthy": "If billing breaks or data disappears — trust is gone instantly",
+    "untrustworthy": "If billing breaks or data disappears \u2014 trust is gone instantly",
     "predictable_complaints": "Why is onboarding so confusing? Where are the docs? Why did my export fail?"
   },
   "personas": [
-    {"name": "Skeptical-Money", "rationale": "Budget is tight and runway is short — every dollar matters"},
-    {"name": "Frustrated-End-User", "rationale": "Beta users will judge fast; bad UX kills word-of-mouth"},
-    {"name": "Change-Resister", "rationale": "Internal stakeholders may block scope decisions"},
-    {"name": "Ops-Engineer", "rationale": "Solo engineer means no ops redundancy"},
-    {"name": "Competitor-Strategist", "rationale": "90-day window is visible to competitors"},
-    {"name": "AI-Optimism Auditor", "rationale": "Plan uses suspiciously round numbers and confident language"}
+    {
+      "name": "Skeptical-Money",
+      "rationale": "Budget is tight and runway is short \u2014 every dollar matters"
+    },
+    {
+      "name": "Frustrated-End-User",
+      "rationale": "Beta users will judge fast; bad UX kills word-of-mouth"
+    },
+    {
+      "name": "Change-Resister",
+      "rationale": "Internal stakeholders may block scope decisions"
+    },
+    {
+      "name": "Ops-Engineer",
+      "rationale": "Solo engineer means no ops redundancy"
+    },
+    {
+      "name": "Competitor-Strategist",
+      "rationale": "90-day window is visible to competitors"
+    },
+    {
+      "name": "AI-Optimism Auditor",
+      "rationale": "Plan uses suspiciously round numbers and confident language"
+    }
   ],
   "narratives": {
     "Skeptical-Money": {
@@ -46,7 +68,7 @@
     },
     "AI-Optimism Auditor": {
       "3mo": "The '10 paying customers on day 1' target was a round number, not derived from pipeline data. Actual conversion: 3.",
-      "6mo": "NPS ≥ 30 was aspirational, not baselined. Actual NPS: 18. The plan never defined what 'paying' meant (monthly? annual?).",
+      "6mo": "NPS \u2265 30 was aspirational, not baselined. Actual NPS: 18. The plan never defined what 'paying' meant (monthly? annual?).",
       "12mo": "Every success metric in the original plan was unfalsifiable. The team couldn't tell if they succeeded or failed."
     }
   },
@@ -54,62 +76,110 @@
     {
       "id": 1,
       "name": "Stripe integration timeline underestimated",
-      "severity": {"technical": 2, "financial": 3, "trust": 2, "user_pain": 1, "ops_load": 1, "strategic": 1},
+      "severity": {
+        "technical": 2,
+        "financial": 3,
+        "trust": 2,
+        "user_pain": 1,
+        "ops_load": 1,
+        "strategic": 1
+      },
       "likelihood": "High",
       "urgency": "Block",
       "tripwire": "Stripe integration not code-complete by end of week 3",
       "change_my_mind": "Prior Stripe integration experience on this exact stack",
       "mitigation_summary": "Start Stripe integration in week 1, not week 3",
       "owner_shape": "Founding engineer",
-      "citations": ["Skeptical-Money: 'Stripe took 3 weeks, not 1'", "Ops-Engineer: 'No payment retry logic'"]
+      "citations": [
+        "Skeptical-Money: 'Stripe took 3 weeks, not 1'",
+        "Ops-Engineer: 'No payment retry logic'"
+      ]
     },
     {
       "id": 2,
       "name": "Single engineer as single point of failure",
-      "severity": {"technical": 3, "financial": 2, "trust": 1, "user_pain": 2, "ops_load": 3, "strategic": 3},
+      "severity": {
+        "technical": 3,
+        "financial": 2,
+        "trust": 1,
+        "user_pain": 2,
+        "ops_load": 3,
+        "strategic": 3
+      },
       "likelihood": "High",
       "urgency": "Patch-fast",
       "tripwire": "Engineer works >60 hours in any 2-week period",
       "change_my_mind": "Second engineer hired and onboarded before week 4",
       "mitigation_summary": "Hire a part-time contractor for ops and QA",
       "owner_shape": "Founder / hiring manager",
-      "citations": ["Change-Resister: 'No code review, no docs'", "Ops-Engineer: 'No on-call rotation'"]
+      "citations": [
+        "Change-Resister: 'No code review, no docs'",
+        "Ops-Engineer: 'No on-call rotation'"
+      ]
     },
     {
       "id": 3,
       "name": "No monitoring or incident response",
-      "severity": {"technical": 1, "financial": 1, "trust": 3, "user_pain": 2, "ops_load": 3, "strategic": 2},
+      "severity": {
+        "technical": 1,
+        "financial": 1,
+        "trust": 3,
+        "user_pain": 2,
+        "ops_load": 3,
+        "strategic": 2
+      },
       "likelihood": "High",
       "urgency": "Block",
       "tripwire": "First customer-reported outage with no internal alert",
       "change_my_mind": "Monitoring stack deployed before beta launch",
       "mitigation_summary": "Deploy basic uptime monitoring and alerting before beta",
       "owner_shape": "Ops-Engineer / founding engineer",
-      "citations": ["Ops-Engineer: 'First outage was 4 hours, discovered by tweet'"]
+      "citations": [
+        "Ops-Engineer: 'First outage was 4 hours, discovered by tweet'"
+      ]
     },
     {
       "id": 4,
       "name": "Beta user churn from poor onboarding",
-      "severity": {"technical": 1, "financial": 2, "trust": 2, "user_pain": 3, "ops_load": 0, "strategic": 2},
+      "severity": {
+        "technical": 1,
+        "financial": 2,
+        "trust": 2,
+        "user_pain": 3,
+        "ops_load": 0,
+        "strategic": 2
+      },
       "likelihood": "Medium",
       "urgency": "Patch-fast",
       "tripwire": "More than 2 of 10 beta users churn in first 2 weeks",
       "change_my_mind": "Dedicated onboarding flow tested with 3 users before beta",
       "mitigation_summary": "Build guided onboarding wizard before beta launch",
       "owner_shape": "Product / founding engineer",
-      "citations": ["Frustrated-End-User: 'Onboarding takes 40 minutes'"]
+      "citations": [
+        "Frustrated-End-User: 'Onboarding takes 40 minutes'"
+      ]
     },
     {
       "id": 5,
       "name": "Success metrics are unfalsifiable",
-      "severity": {"technical": 3, "financial": 1, "trust": 1, "user_pain": 0, "ops_load": 0, "strategic": 3},
+      "severity": {
+        "technical": 3,
+        "financial": 1,
+        "trust": 1,
+        "user_pain": 0,
+        "ops_load": 0,
+        "strategic": 3
+      },
       "likelihood": "High",
       "urgency": "Monitor",
       "tripwire": "Team cannot agree on whether Q3 was a success or failure",
       "change_my_mind": "Metrics redefined with baselines and measurement methodology before week 2",
       "mitigation_summary": "Redefine all success metrics with baselines and measurement plans",
       "owner_shape": "Founder / PM",
-      "citations": ["AI-Optimism Auditor: 'Every metric was unfalsifiable'", "Skeptical-Money: 'What does paying mean?'"]
+      "citations": [
+        "AI-Optimism Auditor: 'Every metric was unfalsifiable'",
+        "Skeptical-Money: 'What does paying mean?'"
+      ]
     }
   ],
   "inflated_risks": [
@@ -149,18 +219,43 @@
       "Competitor-Strategist rates competitive threat as urgent; AI-Optimism Auditor says the threat is inflated at this stage"
     ],
     "cascades": [
-      "Stripe delay → billing not ready → can't charge beta users → '10 paying customers' metric fails. Severity uplift: Critical",
-      "Engineer burnout → quality drops → outages increase → beta users churn → investor loses confidence. Severity uplift: High"
+      "Stripe delay \u2192 billing not ready \u2192 can't charge beta users \u2192 '10 paying customers' metric fails. Severity uplift: Critical",
+      "Engineer burnout \u2192 quality drops \u2192 outages increase \u2192 beta users churn \u2192 investor loses confidence. Severity uplift: High"
     ]
   },
   "mitigations": [
-    {"risk_id": 1, "action": "Start Stripe integration in week 1, not week 3. Allocate 2 full weeks.", "owner_shape": "Founding engineer", "by": "End of week 2"},
-    {"risk_id": 2, "action": "Hire a part-time contractor for ops and QA by week 3", "owner_shape": "Founder", "by": "Week 3"},
-    {"risk_id": 3, "action": "Deploy Uptime Robot + PagerDuty before beta launch", "owner_shape": "Founding engineer", "by": "Week 10"},
-    {"risk_id": 4, "action": "Build and user-test a 3-step onboarding wizard", "owner_shape": "Founding engineer", "by": "Week 9"},
-    {"risk_id": 5, "action": "Redefine success metrics: 'paying' = monthly subscriber; NPS baseline from beta week 1", "owner_shape": "Founder / PM", "by": "Week 1"}
+    {
+      "risk_id": 1,
+      "action": "Start Stripe integration in week 1, not week 3. Allocate 2 full weeks.",
+      "owner_shape": "Founding engineer",
+      "by": "End of week 2"
+    },
+    {
+      "risk_id": 2,
+      "action": "Hire a part-time contractor for ops and QA by week 3",
+      "owner_shape": "Founder",
+      "by": "Week 3"
+    },
+    {
+      "risk_id": 3,
+      "action": "Deploy Uptime Robot + PagerDuty before beta launch",
+      "owner_shape": "Founding engineer",
+      "by": "Week 10"
+    },
+    {
+      "risk_id": 4,
+      "action": "Build and user-test a 3-step onboarding wizard",
+      "owner_shape": "Founding engineer",
+      "by": "Week 9"
+    },
+    {
+      "risk_id": 5,
+      "action": "Redefine success metrics: 'paying' = monthly subscriber; NPS baseline from beta week 1",
+      "owner_shape": "Founder / PM",
+      "by": "Week 1"
+    }
   ],
-  "revised_plan": "Ship a working SaaS product with paying customers by end of Q3.\n\nWeek 1: Start Stripe integration + redefine success metrics with baselines\nWeek 2: Stripe integration complete + hire ops contractor posted\nWeek 3–8: Core dev (contractor handles ops/QA from week 3)\nWeek 9: Onboarding wizard built + monitoring deployed\nWeek 10: QA sprint\nWeek 11: Beta with 10 design-partner customers\nWeek 12: Public launch\n\n_[Mitigation for Risk #1: Stripe moved to week 1]_\n_[Mitigation for Risk #2: Contractor hired by week 3]_\n_[Mitigation for Risk #3: Monitoring before beta]_\n_[Mitigation for Risk #4: Onboarding wizard before beta]_\n_[Mitigation for Risk #5: Metrics redefined in week 1]_",
+  "revised_plan": "Ship a working SaaS product with paying customers by end of Q3.\n\nWeek 1: Start Stripe integration + redefine success metrics with baselines\nWeek 2: Stripe integration complete + hire ops contractor posted\nWeek 3\u20138: Core dev (contractor handles ops/QA from week 3)\nWeek 9: Onboarding wizard built + monitoring deployed\nWeek 10: QA sprint\nWeek 11: Beta with 10 design-partner customers\nWeek 12: Public launch\n\n_[Mitigation for Risk #1: Stripe moved to week 1]_\n_[Mitigation for Risk #2: Contractor hired by week 3]_\n_[Mitigation for Risk #3: Monitoring before beta]_\n_[Mitigation for Risk #4: Onboarding wizard before beta]_\n_[Mitigation for Risk #5: Metrics redefined in week 1]_",
   "evidence": [
     {
       "title": "Color Labs shutdown (90-day SaaS failure)",
@@ -189,9 +284,15 @@
   ],
   "unmitigated_confidence": 35,
   "mitigated_confidence": 62,
-  "flags_used": {"fast": false, "for_exec": true, "ai_source": false, "no_process_log": false},
+  "flags_used": {
+    "fast": false,
+    "for_exec": true,
+    "ai_source": false,
+    "no_process_log": false
+  },
   "process_log_path": null,
   "exec_pager_path": "exec.md",
   "ai_source": false,
-  "report_id": "2026-05-26-1400-launch-saas-mvp"
+  "report_id": "2026-05-26-1400-launch-saas-mvp",
+  "confidence_uncalibrated": true
 }

@@ -6,6 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from time_travel.models import Report
+from time_travel.synthesis import confidence_render_context
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
 _MAX_WORDS = 300
@@ -15,6 +16,12 @@ class ExecPagerTooLongError(ValueError):
     pass
 
 
+def _confidence_context(report: Report) -> dict[str, str]:
+    return confidence_render_context(
+        report.unmitigated_confidence, report.mitigated_confidence, report.confirmed_risks
+    )
+
+
 def render_exec(report: Report) -> str:
     env = Environment(
         loader=FileSystemLoader(str(_TEMPLATES_DIR)),
@@ -22,7 +29,7 @@ def render_exec(report: Report) -> str:
         keep_trailing_newline=True,
     )
     template = env.get_template("exec.md.j2")
-    text = template.render(report=report)
+    text = template.render(report=report, **_confidence_context(report))
     word_count = len(text.split())
     if word_count > _MAX_WORDS:
         raise ExecPagerTooLongError(
@@ -45,7 +52,7 @@ def render_exec_html(report: Report) -> str:
         keep_trailing_newline=True,
     )
     template = env.get_template("exec.html.j2")
-    return template.render(report=report)
+    return template.render(report=report, **_confidence_context(report))
 
 
 def render_exec_html_to_file(report: Report, output_path: Path) -> Path:

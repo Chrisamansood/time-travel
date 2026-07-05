@@ -6,9 +6,9 @@
 
 ## Confidence
 
-- **Unmitigated:** 35%
-- **Mitigated:** 62%
-- **Lift:** +27pp from 5 mitigations
+- **Unmitigated:** Low
+- **Mitigated:** Moderate
+- **Drivers:** driven by: 5 confirmed risks, 2 at Block tier, 5 mitigations applied
 
 ────────────────────────────────────────────────────────────────────────
 

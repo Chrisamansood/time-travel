@@ -18,7 +18,7 @@ footer{margin-top:32px;padding-top:12px;border-top:1px solid #1e2329;color:#444c
 <div class="tt-eyebrow">&gt; TIME-TRAVEL EXEC SUMMARY</div>
 <h1>{{ report.plan_title }}</h1>
 <div>{{ report.generated_at.strftime('%Y-%m-%d') }} · {{ report.personas | length }} personas</div>
-<div class="tt-conf">Confidence: {{ report.unmitigated_confidence }}% unmitigated &rarr; {{ report.mitigated_confidence }}% mitigated</div>
+<div class="tt-conf">Confidence: {{ unmitigated_band }} unmitigated &rarr; {{ mitigated_band }} mitigated<br>{{ confidence_drivers }}</div>
 <h2>Top Risks</h2>
 <ol>
 {% for risk in report.confirmed_risks[:3] %}

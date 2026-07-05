@@ -151,8 +151,12 @@ class Report:
     evidence: list[EvidenceItem]
 
     # ── synthesis scores ──────────────────────────────────────────────────
+    # Raw 0-100 heuristic, unvalidated against real premortems (audit C4).
+    # Rendered output shows a qualitative band (see synthesis.confidence_band)
+    # instead — these numbers exist for report.json only.
     unmitigated_confidence: int
     mitigated_confidence: int
+    confidence_uncalibrated: bool = True
 
     # ── run metadata ──────────────────────────────────────────────────────
     flags_used: dict[str, bool] = field(default_factory=dict)

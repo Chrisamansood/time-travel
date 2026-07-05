@@ -45,6 +45,10 @@ a:hover{text-decoration:underline}
 .tt-conf-fill{height:100%;transition:width .3s}
 .tt-conf-fill.unmit{background:var(--red)}
 .tt-conf-fill.mit{background:var(--accent)}
+.tt-conf-fill.band-low{width:20%}
+.tt-conf-fill.band-guarded{width:45%}
+.tt-conf-fill.band-moderate{width:70%}
+.tt-conf-fill.band-high{width:95%}
 .tt-conf-lift{font-family:var(--mono);font-size:.85rem;color:var(--accent);margin-top:8px}
 
 /* ── main layout ─────────────────────────────── */
@@ -150,15 +154,15 @@ a:hover{text-decoration:underline}
 <div class="tt-confidence">
   <div class="tt-conf-row">
     <span class="tt-conf-label">UNMITIGATED</span>
-    <span class="tt-conf-val" style="color:var(--red)">35%</span>
-    <div class="tt-conf-bar"><div class="tt-conf-fill unmit" style="width:35%"></div></div>
+    <span class="tt-conf-val" style="color:var(--red)">Low</span>
+    <div class="tt-conf-bar"><div class="tt-conf-fill unmit band-low"></div></div>
   </div>
   <div class="tt-conf-row" style="margin-top:8px">
     <span class="tt-conf-label">MITIGATED</span>
-    <span class="tt-conf-val" style="color:var(--accent)">62%</span>
-    <div class="tt-conf-bar"><div class="tt-conf-fill mit" style="width:62%"></div></div>
+    <span class="tt-conf-val" style="color:var(--accent)">Moderate</span>
+    <div class="tt-conf-bar"><div class="tt-conf-fill mit band-moderate"></div></div>
   </div>
-  <div class="tt-conf-lift">▲ 27pp lift · 5 mitigations applied</div>
+  <div class="tt-conf-lift">driven by: 5 confirmed risks, 2 at Block tier · 5 mitigations applied</div>
 </div>
 
 

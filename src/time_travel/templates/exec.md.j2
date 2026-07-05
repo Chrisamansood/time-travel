@@ -2,7 +2,7 @@
 
 > Time-Travel Premortem · {{ report.generated_at.strftime('%Y-%m-%d') }} · {{ report.personas | length }} personas
 
-**Confidence:** {{ report.unmitigated_confidence }}% unmitigated → {{ report.mitigated_confidence }}% mitigated (+{{ report.mitigated_confidence - report.unmitigated_confidence }}pp)
+**Confidence:** {{ unmitigated_band }} unmitigated → {{ mitigated_band }} mitigated ({{ confidence_drivers }})
 
 ## Top Risks
 

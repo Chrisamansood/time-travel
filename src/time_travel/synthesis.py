@@ -280,3 +280,41 @@ def compute_confidence(
     unmitigated = max(0, min(100, round(unmitigated)))
     mitigated = max(0, min(100, round(mitigated)))
     return unmitigated, mitigated
+
+
+# Confidence bands (audit C4): the 0-100 math is heuristic and uncalibrated
+# against any real premortem, so rendered output shows a qualitative band
+# instead of a raw percentage. Thresholds are the upper bound (exclusive)
+# of each band below "High".
+_CONFIDENCE_BAND_THRESHOLDS: tuple[tuple[int, str], ...] = (
+    (40, "Low"),
+    (60, "Guarded"),
+    (80, "Moderate"),
+)
+
+
+def confidence_band(score: int) -> str:
+    """Map a 0-100 confidence score to a qualitative band."""
+    for threshold, label in _CONFIDENCE_BAND_THRESHOLDS:
+        if score < threshold:
+            return label
+    return "High"
+
+
+def confidence_drivers(confirmed_risks: list[Risk]) -> str:
+    """One-line explanation of what's behind a confidence band."""
+    block_count = sum(1 for r in confirmed_risks if r.urgency == "Block")
+    risk_word = "risk" if len(confirmed_risks) == 1 else "risks"
+    return f"driven by: {len(confirmed_risks)} confirmed {risk_word}, {block_count} at Block tier"
+
+
+def confidence_render_context(
+    unmitigated_confidence: int, mitigated_confidence: int, confirmed_risks: list[Risk]
+) -> dict[str, str]:
+    """Template context shared by every renderer (html/md/exec) — bands and
+    drivers, never the raw uncalibrated percentages (audit C4)."""
+    return {
+        "unmitigated_band": confidence_band(unmitigated_confidence),
+        "mitigated_band": confidence_band(mitigated_confidence),
+        "confidence_drivers": confidence_drivers(confirmed_risks),
+    }

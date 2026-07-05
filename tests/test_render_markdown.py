@@ -30,10 +30,13 @@ def test_render_markdown_contains_plan_title():
     assert "Launch a SaaS MVP in 90 Days" in md
 
 
-def test_render_markdown_contains_confidence():
-    md = render_markdown(_load_fixture())
-    assert "35%" in md
-    assert "62%" in md
+def test_render_markdown_contains_confidence_bands_not_percentages():
+    report = _load_fixture()
+    md = render_markdown(report)
+    assert "Low" in md
+    assert "Moderate" in md
+    assert f"{report.unmitigated_confidence}%" not in md
+    assert f"{report.mitigated_confidence}%" not in md
 
 
 def test_render_markdown_contains_all_sections():

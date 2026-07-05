@@ -6,9 +6,9 @@
 
 ## Confidence
 
-- **Unmitigated:** {{ report.unmitigated_confidence }}%
-- **Mitigated:** {{ report.mitigated_confidence }}%
-- **Lift:** +{{ report.mitigated_confidence - report.unmitigated_confidence }}pp from {{ report.mitigations | length }} mitigations
+- **Unmitigated:** {{ unmitigated_band }}
+- **Mitigated:** {{ mitigated_band }}
+- **Drivers:** {{ confidence_drivers }}, {{ report.mitigations | length }} mitigations applied
 
 ────────────────────────────────────────────────────────────────────────
 

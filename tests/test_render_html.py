@@ -38,11 +38,13 @@ def test_render_html_contains_all_confirmed_risks():
         assert risk.name in html
 
 
-def test_render_html_contains_confidence_scores():
+def test_render_html_contains_confidence_bands_not_percentages():
     report = _load_fixture()
     html = render_html(report)
-    assert f"{report.unmitigated_confidence}%" in html
-    assert f"{report.mitigated_confidence}%" in html
+    assert ">Low<" in html
+    assert ">Moderate<" in html
+    assert f"{report.unmitigated_confidence}%" not in html
+    assert f"{report.mitigated_confidence}%" not in html
 
 
 def test_render_html_contains_footer_watermark():

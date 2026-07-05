@@ -2,7 +2,7 @@
 
 > Time-Travel Premortem · 2026-05-26 · 6 personas
 
-**Confidence:** 35% unmitigated → 62% mitigated (+27pp)
+**Confidence:** Low unmitigated → Moderate mitigated (driven by: 5 confirmed risks, 2 at Block tier)
 
 ## Top Risks
 
