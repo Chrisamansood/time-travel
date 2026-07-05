@@ -24,6 +24,7 @@ dependencies = [
     "jinja2>=3.1",
     "rich>=13",
     "dataclasses-json>=0.6",
+    "jsonschema>=4.18",
 ]
 
 [project.scripts]
@@ -40,6 +41,9 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+time_travel = ["templates/*.j2", "schemas/*.json"]
 
 [tool.ruff]
 line-length = 100

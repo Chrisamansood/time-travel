@@ -36,3 +36,20 @@ def render_exec_to_file(report: Report, output_path: Path) -> Path:
     md = render_exec(report)
     output_path.write_text(md, encoding="utf-8")
     return output_path
+
+
+def render_exec_html(report: Report) -> str:
+    env = Environment(
+        loader=FileSystemLoader(str(_TEMPLATES_DIR)),
+        autoescape=True,
+        keep_trailing_newline=True,
+    )
+    template = env.get_template("exec.html.j2")
+    return template.render(report=report)
+
+
+def render_exec_html_to_file(report: Report, output_path: Path) -> Path:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    html = render_exec_html(report)
+    output_path.write_text(html, encoding="utf-8")
+    return output_path

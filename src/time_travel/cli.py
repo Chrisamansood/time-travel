@@ -4,8 +4,9 @@ from __future__ import annotations
 import argparse
 import asyncio
 import sys
+from pathlib import Path
 
-from time_travel import orchestrator
+from time_travel import claims, orchestrator
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -54,6 +55,14 @@ def create_parser() -> argparse.ArgumentParser:
     render.add_argument("report_json", help="Path to a report JSON file")
     render.add_argument("--output", default="./time-travel-reports", help="Output directory")
 
+    # ── synthesize ────────────────────────────────────────────────────────────
+    synthesize = subparsers.add_parser(
+        "synthesize",
+        help="Build a report from a skill-emitted claims JSON file (no LLM calls)",
+    )
+    synthesize.add_argument("claims_json", help="Path to a claims JSON file (schema v1)")
+    synthesize.add_argument("--output", default="./time-travel-reports", help="Output directory")
+
     # ── doctor ────────────────────────────────────────────────────────────────
     subparsers.add_parser("doctor", help="Verify env vars, deps, and network connectivity")
 
@@ -93,6 +102,16 @@ def main() -> None:
     elif args.command == "render":
         out_dir = orchestrator.render_from_json(args.report_json, args.output)
         print(f"Rendered to: {out_dir}")
+    elif args.command == "synthesize":
+        try:
+            report = orchestrator.synthesize_from_claims(args.claims_json, args.output)
+        except claims.ClaimsValidationError as exc:
+            print(f"synthesize: {exc}", file=sys.stderr)
+            sys.exit(1)
+        print(f"Plan: {report.plan_title}")
+        print(f"Confidence: {report.unmitigated_confidence} -> {report.mitigated_confidence}")
+        print(f"Confirmed risks: {len(report.confirmed_risks)}")
+        print(f"Report written to: {Path(args.output) / report.report_id}")
     elif args.command == "doctor":
         print("doctor: checks not yet implemented (Plan B)")
     elif args.command == "personas":

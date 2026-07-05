@@ -18,6 +18,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from time_travel import claims
 from time_travel.models import (
     BuriedRisk,
     EvidenceItem,
@@ -31,7 +32,7 @@ from time_travel.models import (
 from time_travel.personas.library import Persona
 from time_travel.personas.selection import select_roster
 from time_travel.providers.base import LLMProvider
-from time_travel.render.exec_pager import render_exec_to_file
+from time_travel.render.exec_pager import render_exec_html_to_file, render_exec_to_file
 from time_travel.render.html_matrix import render_html_to_file
 from time_travel.render.markdown import render_markdown_to_file
 from time_travel.search.base import WebSearch
@@ -365,3 +366,64 @@ def render_from_json(report_json_path: str, output_dir: str) -> Path:
     if report.exec_pager_path:
         render_exec_to_file(report, out / "exec.md")
     return out
+
+
+def synthesize_from_claims(claims_path: str, output_dir: str) -> Report:
+    """Build and render a Report from a skill-emitted claims JSON file.
+
+    No LLM calls, no network — pure dedup/classify/confidence/render over
+    already-gathered persona claims (audit-resolved architecture: the
+    skill does the LLM thinking, the engine does the deterministic math).
+    Raises claims.ClaimsValidationError loudly on any malformed or
+    degraded input rather than rendering a hollow report.
+    """
+    data = claims.load_claims_file(claims_path)
+
+    persona_claims = claims.claims_to_persona_risk_claims(data)
+    blind_spots = claims.claims_to_blind_spots(data)
+    confirmed, inflated, buried = classify_risks(persona_claims, blind_spot_candidates=blind_spots)
+
+    mitigations = [
+        Mitigation(risk_id=r.id, action=r.mitigation_summary, owner_shape=r.owner_shape, by="T+3mo")
+        for r in confirmed
+    ]
+    mitigated_ids = {m.risk_id for m in mitigations}
+    unmitigated_confidence, mitigated_confidence = compute_confidence(confirmed, mitigated_ids)
+
+    plan = data["plan"]
+    generated_at = datetime.now()
+    report_id = generated_at.strftime("%Y-%m-%dT%H%M%S")
+    report = Report(
+        plan_title=plan["title"],
+        plan_source=plan.get("source_type", "unknown"),
+        generated_at=generated_at,
+        horizons=plan.get("horizons", ["3mo", "6mo", "12mo"]),
+        plan_text=plan["goal"],
+        user_pov=claims.claims_to_user_pov(data),
+        personas=claims.claims_to_personas(data),
+        narratives={},
+        confirmed_risks=confirmed,
+        inflated_risks=inflated,
+        buried_risks=buried,
+        rebuttal=claims.claims_to_rebuttal(data),
+        mitigations=mitigations,
+        revised_plan=plan["goal"],
+        evidence=claims.claims_to_evidence(data),
+        unmitigated_confidence=unmitigated_confidence,
+        mitigated_confidence=mitigated_confidence,
+        flags_used={"deep": data.get("mode") == "deep"},
+        ai_source=plan.get("source_type") == "ai_generated",
+        report_id=report_id,
+    )
+
+    out_dir = Path(output_dir) / report_id
+    out_dir.mkdir(parents=True, exist_ok=True)
+    report.exec_pager_path = str(out_dir / "exec.html")
+    (out_dir / "report.json").write_text(
+        report.to_json(), encoding="utf-8"  # type: ignore[attr-defined]
+    )
+    render_html_to_file(report, out_dir / "report.html")
+    render_markdown_to_file(report, out_dir / "report.md")
+    render_exec_html_to_file(report, out_dir / "exec.html")
+
+    return report

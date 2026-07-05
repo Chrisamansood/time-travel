@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "mode": "fast",
+  "plan": {
+    "title": "Migrate billing to the new vendor by Q3",
+    "goal": "Cut billing platform costs 30% by switching vendors before Q3 close.",
+    "timeline": "Q3 2026",
+    "source_type": "human",
+    "audience": "Executive team",
+    "horizons": ["3mo", "6mo", "12mo"]
+  },
+  "user_pov": {
+    "expectations": "Customers expect billing to keep working without noticing a vendor change.",
+    "forgivable": "A one-time delayed invoice would be forgiven if communicated in advance.",
+    "trust_breakers": "A double-charge or lost payment history would break trust immediately.",
+    "predictable_complaints": "Support will get tickets about missing historical invoices."
+  },
+  "blind_spot_candidates": [
+    "Nobody has confirmed the new vendor's SLA covers our peak billing day"
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "title": "Vendor migration outage at a SaaS billing provider",
+      "url": "https://example.com/case-1",
+      "when": "2024",
+      "who": "Industry report",
+      "what_happened": "A billing vendor cutover caused a 2-day invoicing outage.",
+      "why_relevant": "Same cutover pattern as this plan."
+    }
+  ],
+  "personas": [
+    {"id": "P1", "name": "Skeptical-Money", "pov": "Finance lead worried about budget overrun"},
+    {"id": "P2", "name": "Frustrated-End-User", "pov": "Customer who just wants billing to work"},
+    {"id": "P3", "name": "Ops-Engineer", "pov": "Owns the on-call pager for billing incidents"},
+    {"id": "P4", "name": "Support-Lead", "pov": "Owns the support queue"},
+    {"id": "P5", "name": "Compliance-Officer", "pov": "Owns audit and regulatory sign-off"}
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "persona_id": "P1",
+      "name": "Budget overrun",
+      "mechanism": "Vendor contract has uncapped overage fees for peak billing days",
+      "severity": {"technical": 1, "financial": 3, "trust": 1, "user_pain": 0, "ops_load": 1, "strategic": 1},
+      "likelihood": "high",
+      "tripwire": "First invoice after cutover exceeds projected cost by 10%",
+      "change_my_mind": "A signed contract amendment capping overage fees",
+      "citations": ["E1"],
+      "mitigation": "Negotiate a fee cap before signing",
+      "owner_shape": "Finance / FP&A"
+    },
+    {
+      "id": "C2",
+      "persona_id": "P2",
+      "name": "Cost overrun",
+      "mechanism": "Vendor contract has uncapped overage fees for peak billing days",
+      "severity": {"technical": 0, "financial": 2, "trust": 1, "user_pain": 1, "ops_load": 0, "strategic": 0},
+      "likelihood": "medium",
+      "tripwire": "Customer billing complaints spike after cutover",
+      "change_my_mind": "Post-cutover invoices land within 2% of forecast",
+      "citations": [],
+      "mitigation": "Publish a cutover FAQ for customers",
+      "owner_shape": "Support Lead"
+    },
+    {
+      "id": "C3",
+      "persona_id": "P3",
+      "name": "Cutover outage risk",
+      "mechanism": "No rollback plan exists if the new vendor's API fails during cutover",
+      "severity": {"technical": 3, "financial": 1, "trust": 3, "user_pain": 3, "ops_load": 2, "strategic": 1},
+      "likelihood": "medium",
+      "tripwire": "Staging cutover rehearsal fails or is skipped",
+      "change_my_mind": "A tested rollback runbook with a rehearsed dry run",
+      "internal_signal": "Plan has no rollback section",
+      "mitigation": "Write and rehearse a rollback runbook before cutover",
+      "owner_shape": "Engineering Lead"
+    },
+    {
+      "id": "C4",
+      "persona_id": "P4",
+      "name": "Support ticket surge",
+      "mechanism": "Customers won't recognize the new vendor's invoice format",
+      "severity": {"technical": 0, "financial": 0, "trust": 1, "user_pain": 2, "ops_load": 2, "strategic": 0},
+      "likelihood": "high",
+      "tripwire": "Ticket volume exceeds 2x baseline in week 1",
+      "change_my_mind": "Customer-facing invoice format is unchanged from before",
+      "citations": [],
+      "mitigation": "Preview the new invoice format to customers before cutover",
+      "owner_shape": "Support Lead"
+    },
+    {
+      "id": "C5",
+      "persona_id": "P5",
+      "name": "Leadership sponsor disengagement",
+      "mechanism": "Executive sponsor has stopped attending steering meetings",
+      "severity": {"technical": 0, "financial": 1, "trust": 2, "user_pain": 0, "ops_load": 1, "strategic": 2},
+      "likelihood": "medium",
+      "tripwire": "Sponsor misses two consecutive steering meetings",
+      "change_my_mind": "Sponsor re-engages and confirms the Q3 date is still a priority",
+      "hedged_language": true,
+      "mitigation": "Escalate a direct check-in with the sponsor",
+      "owner_shape": "Executive Sponsor"
+    }
+  ]
+}

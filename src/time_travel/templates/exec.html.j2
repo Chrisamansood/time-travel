@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ report.plan_title }} — Executive Summary</title>
+<style>
+body{background:#111418;color:#F0F6FC;font-family:system-ui,-apple-system,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.5}
+h1{font-size:20px;margin-bottom:4px}
+.tt-eyebrow{color:#00D26A;font-family:ui-monospace,'Courier New',monospace;font-size:12px;letter-spacing:.05em}
+.tt-conf{font-family:ui-monospace,'Courier New',monospace;font-size:14px;margin:16px 0;padding:12px;background:#0d1117;border:1px solid #1e2329}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#9198a1;border-bottom:1px solid #1e2329;padding-bottom:4px;margin-top:28px}
+ol,ul{padding-left:20px}
+li{margin-bottom:6px}
+footer{margin-top:32px;padding-top:12px;border-top:1px solid #1e2329;color:#444c56;font-size:12px}
+</style>
+</head>
+<body>
+<div class="tt-eyebrow">&gt; TIME-TRAVEL EXEC SUMMARY</div>
+<h1>{{ report.plan_title }}</h1>
+<div>{{ report.generated_at.strftime('%Y-%m-%d') }} · {{ report.personas | length }} personas</div>
+<div class="tt-conf">Confidence: {{ report.unmitigated_confidence }}% unmitigated &rarr; {{ report.mitigated_confidence }}% mitigated</div>
+<h2>Top Risks</h2>
+<ol>
+{% for risk in report.confirmed_risks[:3] %}
+  <li><strong>{{ risk.name }}</strong> ({{ risk.likelihood }}, {{ risk.urgency }}) — {{ risk.mitigation_summary }}</li>
+{% endfor %}
+</ol>
+{% if report.buried_risks %}
+<h2>Buried Risk</h2>
+<div>{{ report.buried_risks[0].name }}: {{ report.buried_risks[0].why_unspoken }}</div>
+{% endif %}
+<footer>Full report: report.md · Dashboard: report.html</footer>
+</body>
+</html>
