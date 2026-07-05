@@ -1,12 +1,12 @@
-"""Tests for CLI argument parsing.
-
-All subcommands are stubs in Plan A — no engine calls happen here.
-"""
+"""Tests for CLI argument parsing and command wiring."""
 from __future__ import annotations
 
+from datetime import datetime
 from unittest.mock import patch
 
 import pytest
+
+from time_travel.models import Rebuttal, Report, UserPOV
 
 
 def get_parser():
@@ -145,3 +145,83 @@ def test_no_command_exits_with_code_1():
             from time_travel.cli import main
             main()
     assert exc.value.code == 1
+
+
+# ── run command wiring (Plan B7) ──────────────────────────────────────────────────
+
+def _fake_report():
+    return Report(
+        plan_title="Test Plan",
+        plan_source="plan.md",
+        generated_at=datetime(2026, 1, 1),
+        horizons=["3mo", "6mo", "12mo"],
+        plan_text="text",
+        user_pov=UserPOV("", "", "", ""),
+        personas=[],
+        narratives={},
+        confirmed_risks=[],
+        inflated_risks=[],
+        buried_risks=[],
+        rebuttal=Rebuttal([], [], []),
+        mitigations=[],
+        revised_plan="text",
+        evidence=[],
+        unmitigated_confidence=100,
+        mitigated_confidence=100,
+        report_id="20260101T000000",
+    )
+
+
+def test_run_command_calls_orchestrator_with_parsed_options(monkeypatch):
+    from time_travel import cli
+
+    captured = {}
+
+    async def fake_run(source, opts, **kwargs):
+        captured["source"] = source
+        captured["opts"] = opts
+        return _fake_report()
+
+    monkeypatch.setattr(cli.orchestrator, "run", fake_run)
+
+    with patch("sys.argv", ["time-travel", "run", "plan.md", "--for-exec", "--provider", "stub"]):
+        cli.main()
+
+    assert captured["source"] == "plan.md"
+    assert captured["opts"].for_exec is True
+    assert captured["opts"].provider == "stub"
+
+
+def test_run_command_does_not_raise_not_implemented(monkeypatch):
+    from time_travel import cli
+
+    async def fake_run(source, opts, **kwargs):
+        return _fake_report()
+
+    monkeypatch.setattr(cli.orchestrator, "run", fake_run)
+
+    with patch("sys.argv", ["time-travel", "run", "plan.md"]):
+        cli.main()  # must not raise
+
+
+# ── render command wiring (Plan B7) ───────────────────────────────────────────────
+
+def test_render_command_calls_orchestrator_render_from_json(monkeypatch, tmp_path):
+    from time_travel import cli
+
+    captured = {}
+
+    def fake_render_from_json(report_json_path, output_dir):
+        captured["report_json_path"] = report_json_path
+        captured["output_dir"] = output_dir
+        return tmp_path / "rendered"
+
+    monkeypatch.setattr(cli.orchestrator, "render_from_json", fake_render_from_json)
+
+    with patch(
+        "sys.argv", ["time-travel", "render", "report.json", "--output", str(tmp_path)]
+    ):
+        cli.main()
+
+    assert captured["report_json_path"] == "report.json"
+    assert captured["output_dir"] == str(tmp_path)

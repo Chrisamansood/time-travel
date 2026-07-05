@@ -1,12 +1,11 @@
-"""CLI entry point for time-travel.
-
-All subcommands are stubbed in Plan A. The orchestrator (Plan B) and
-renderers (Plan C) will replace the NotImplementedError stubs.
-"""
+"""CLI entry point for time-travel."""
 from __future__ import annotations
 
 import argparse
+import asyncio
 import sys
+
+from time_travel import orchestrator
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -75,13 +74,25 @@ def main() -> None:
         sys.exit(1)
 
     if args.command == "run":
-        raise NotImplementedError(
-            "Engine not yet installed. Run Plan B to implement the orchestrator."
+        opts = orchestrator.RunOptions(
+            provider=args.provider,
+            model=args.model,
+            search=args.search,
+            fast=args.fast,
+            horizons=args.horizons,
+            output=args.output,
+            for_exec=args.for_exec,
+            ai_source=args.ai_source,
+            no_process_log=args.no_process_log,
         )
+        report = asyncio.run(orchestrator.run(args.source, opts))
+        print(f"Plan: {report.plan_title}")
+        print(f"Confidence: {report.unmitigated_confidence} -> {report.mitigated_confidence}")
+        print(f"Confirmed risks: {len(report.confirmed_risks)}")
+        print(f"Report written to: {opts.output}")
     elif args.command == "render":
-        raise NotImplementedError(
-            "Renderer not yet installed. Run Plan C to implement the renderers."
-        )
+        out_dir = orchestrator.render_from_json(args.report_json, args.output)
+        print(f"Rendered to: {out_dir}")
     elif args.command == "doctor":
         print("doctor: checks not yet implemented (Plan B)")
     elif args.command == "personas":
